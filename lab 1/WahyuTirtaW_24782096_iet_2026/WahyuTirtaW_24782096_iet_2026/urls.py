@@ -20,7 +20,7 @@ from django.urls import path
 from django.http import HttpResponse
 
 def welcome(request):
-    return HttpResponse("Selamat datang di web wahyu!")
+    return HttpResponse("Welcome to Django!")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
