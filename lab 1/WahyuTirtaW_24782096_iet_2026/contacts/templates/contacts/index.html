@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Contact Us</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        background: #f4f6fb;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .contact-container {
+        max-width: 500px;
+        margin: 60px auto;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(60, 72, 88, 0.15);
+        padding: 40px 32px;
+      }
+      .contact-container h2 {
+        margin-bottom: 24px;
+        color: #2d3748;
+        font-weight: 700;
+        text-align: center;
+      }
+      .form-group {
+        margin-bottom: 18px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        color: #4a5568;
+        font-size: 15px;
+      }
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 16px;
+        background: #f7fafc;
+        transition: border-color 0.2s;
+      }
+      .form-group input:focus,
+      .form-group textarea:focus {
+        border-color: #3182ce;
+        outline: none;
+      }
+      .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+      .contact-btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(90deg, #3182ce 0%, #63b3ed 100%);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 17px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .contact-btn:hover {
+        background: linear-gradient(90deg, #2563eb 0%, #4299e1 100%);
+      }
+      @media (max-width: 600px) {
+        .contact-container {
+          padding: 24px 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="contact-container">
+      <h2>Contact Us</h2>
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            placeholder="Your Name"
+          />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            placeholder="you@example.com"
+          />
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea
+            id="message"
+            name="message"
+            required
+            placeholder="Type your message..."
+          ></textarea>
+        </div>
+        <button type="submit" class="contact-btn">Send Message</button>
+        <div style="display: flex; gap: 10px; margin-top: 16px">
+          <a
+            href="/"
+            class="contact-btn"
+            style="
+              background: #e2e8f0;
+              color: #4a5568;
+              flex: 1;
+              text-align: center;
+              text-decoration: none;
+            "
+            >Home</a
+          >
+          <a
+            href="/abouts/"
+            class="contact-btn"
+            style="
+              background: #e2e8f0;
+              color: #4a5568;
+              flex: 1;
+              text-align: center;
+              text-decoration: none;
+            "
+            >About</a
+          >
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
