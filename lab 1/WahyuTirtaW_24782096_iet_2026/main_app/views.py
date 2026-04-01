@@ -11,7 +11,7 @@ def home(request):
         }
     return render(request, 'main_app/index.html', context)
 
-def add_report(request):
+def add_Report(request):
     if request.method == 'POST':
         form = ReportForm(request.POST)
         if form.is_valid():

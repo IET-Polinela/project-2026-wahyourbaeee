@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Report(models.Model):
-    titel = models.CharField(max_length=200)
+    title = models.CharField(max_length=200)
     category = models.CharField(max_length=200)
     description = models.TextField()
     location = models.CharField(max_length=200)
