@@ -78,9 +78,9 @@ WSGI_APPLICATION = 'WahyuTirtaW_24782096_iet_2026.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smartcity_db',
+        'NAME': 'Smart_db', # Ganti dengan nama database PostgreSQL Anda
         'USER': 'postgres',
-        'PASSWORD': 'password123',
+        'PASSWORD': 'Kopi23', # Ganti dengan password PostgreSQL 
         'HOST': 'localhost', 
         'PORT': '5432',
     }
