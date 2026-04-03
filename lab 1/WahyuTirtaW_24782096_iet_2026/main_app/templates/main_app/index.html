@@ -10,6 +10,18 @@
   </head>
   <body>
     <div class="container mt-5">
+      {% if messages %} {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %} {% endif %}
+
       <h1 class="mb-4">{{ heading }}</h1>
       <p>
         {{description}}
@@ -17,6 +29,8 @@
       </p>
     </div>
     <div class="container mt-4 d-flex justify-content-center">
+      <a href="/add/" class="btn btn-success">Buat Laporan Baru</a>
+      <a href="/list/" class="btn btn-warning">Lihat Semua Laporan</a>
       <a href="/abouts/" class="btn btn-info me-2">About</a>
       <a href="/contacts/" class="btn btn-secondary">Contact Us</a>
     </div>
