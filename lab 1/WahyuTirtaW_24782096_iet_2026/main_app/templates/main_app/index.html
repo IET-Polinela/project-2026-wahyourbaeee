@@ -34,5 +34,26 @@
       <a href="/abouts/" class="btn btn-info me-2">About</a>
       <a href="/contacts/" class="btn btn-secondary">Contact Us</a>
     </div>
+    <script>
+      // Tunggu sampai halaman selesai dimuat
+      document.addEventListener("DOMContentLoaded", function () {
+        // Cari semua elemen alert
+        const alerts = document.querySelectorAll(".alert");
+
+        alerts.forEach(function (alert) {
+          // Set timer 3000ms (3 detik)
+          setTimeout(function () {
+            // Tambahkan efek fade out Bootstrap
+            alert.classList.remove("show");
+            alert.classList.add("fade");
+
+            // Hapus elemen dari layar setelah animasi selesai (0.5 detik kemudian)
+            setTimeout(function () {
+              alert.remove();
+            }, 500);
+          }, 3000);
+        });
+      });
+    </script>
   </body>
 </html>

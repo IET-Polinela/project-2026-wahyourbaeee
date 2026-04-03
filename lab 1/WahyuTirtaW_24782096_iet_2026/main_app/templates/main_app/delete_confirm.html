@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+  <body>
+    <h2>Konfirmasi Hapus</h2>
+    <p>Yakin mau hapus laporan: <strong>{{ report.title }}</strong>?</p>
+
+    <form method="POST">
+      {% csrf_token %}
+      <button type="submit" style="background-color: red; color: white">
+        Ya, Hapus!
+      </button>
+      <a href="{% url 'list_reports' %}">Batal</a>
+    </form>
+  </body>
+</html>

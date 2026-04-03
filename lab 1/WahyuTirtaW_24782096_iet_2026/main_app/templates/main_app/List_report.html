@@ -16,24 +16,24 @@
         {% for item in laporan %}
         <tr>
           <td>{{ item.title }}</td>
+          <td>{{ item.category }}</td>
           <td>
             <a
               href="{% url 'update_report' item.id %}"
-              class="btn btn-sm btn-warning"
+              class="btn btn-warning btn-sm"
               >Edit</a
             >
             <a
               href="{% url 'delete_report' item.id %}"
-              class="btn btn-sm btn-danger"
+              class="btn btn-danger btn-sm"
               >Hapus</a
             >
           </td>
         </tr>
-        {% empty %}
+        {% endfor %}
         <tr>
           <td colspan="2">Belum ada laporan masuk.</td>
         </tr>
-        {% endfor %}
       </tbody>
     </table>
     <br />

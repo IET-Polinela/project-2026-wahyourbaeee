@@ -46,7 +46,7 @@ def update_report(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, 'Laporan berhasil diperbarui!')
-            return redirect('list_report') # Sesuaikan nama name di urls.py lo
+            return redirect('list_reports') # Sesuaikan nama name di urls.py lo
     else:
         # Tampilkan form yang udah ada isinya (data lama)
         form = ReportForm(instance=report)
@@ -59,6 +59,6 @@ def delete_report(request, pk):
     if request.method == 'POST':
         report.delete()
         messages.warning(request, 'Laporan telah dihapus!')
-        return redirect('list_report')
+        return redirect('list_reports') # Sesuaikan nama name di urls.py lo
     
     return render(request, 'main_app/delete_confirm.html', {'report': report})
