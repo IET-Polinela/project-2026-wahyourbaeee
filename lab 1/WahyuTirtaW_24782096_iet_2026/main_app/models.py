@@ -1,5 +1,12 @@
 from django.db import models
 
+STATUS_CHOICES = [
+    ('REPORTED', 'Reported'),
+    ('VERIFIED', 'Verified'),
+    ('IN_PROGRESS', 'In Progress'),
+    ('RESOLVED', 'Resolved'),
+]
+
 # Create your models here.
 class Report(models.Model):
     title = models.CharField(max_length=200)

@@ -8,12 +8,13 @@ from django.shortcuts import get_object_or_404
 # Create your views here.
 def home(request):
     context = {
-        'title': 'Home |T-City',
-        'heading': 'Selamat Datang di T-Map',
-        'description': 'Halo, ini adalah halaman utama T-MAP (Tirtacity Management & Action Platform) ! T-MAP adalah sebuah ekosistem digital terintegrasi yang dirancang sebagai solusi cerdas dalam pengelolaan infrastruktur dan layanan publik di lingkungan perkotaan. Platform ini menjembatani komunikasi antara warga dan pengelola kota melalui sistem pelaporan isu yang transparan dan terstruktur, mulai dari kendala utilitas hingga kerusakan fasilitas umum. Dengan mengedepankan efisiensi workflow dan validitas data, T-MAP mentransformasi setiap laporan masyarakat menjadi aksi nyata, guna mewujudkan tata kelola kota yang lebih responsif, modern, dan berkelanjutan untuk semua warga', 
+        'title': 'TheoTown - T-MAP',
+        'heading': 'Selamat Datang di TheoTown',
+        'description': 'Halo, ini adalah halaman utama T-MAP (TheoTown Management & Action Platform) ! T-MAP adalah sebuah ekosistem digital terintegrasi yang dirancang sebagai solusi cerdas dalam pengelolaan infrastruktur dan layanan publik di lingkungan perkotaan. Platform ini menjembatani komunikasi antara warga dan pengelola kota melalui sistem pelaporan isu yang transparan dan terstruktur, mulai dari kendala utilitas hingga kerusakan fasilitas umum. Dengan mengedepankan efisiensi workflow dan validitas data, T-MAP mentransformasi setiap laporan masyarakat menjadi aksi nyata, guna mewujudkan tata kelola kota yang lebih responsif, modern, dan berkelanjutan untuk semua warga', 
         }
     return render(request, 'main_app/index.html', context)
 
+# Create
 def add_Report(request):
     if request.method == 'POST':
         form = ReportForm(request.POST)
@@ -27,7 +28,7 @@ def add_Report(request):
     return render(request,
                   'main_app/add_report.html',{'form': form})
 
-
+# Read
 def list_Report(request):
     # INI BARIS YANG KURANG: Ambil semua data dari PostgreSQL
     data_laporan = Report.objects.all() 
