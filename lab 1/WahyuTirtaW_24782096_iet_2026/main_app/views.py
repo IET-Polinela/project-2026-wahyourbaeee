@@ -44,31 +44,12 @@ class ReportUpdateView(UpdateView):
     def form_valid(self, form): 
         messages.success(self.request, 'Laporan berhasil diperbarui!')
         return super().form_valid(form)
+    
+class ReportDeleteView(DeleteView):
+    model = Report
+    template_name = "main_app/delete_confirm.html"
+    success_url = reverse_lazy('list_reports')
 
-# Fungsi Update
-def update_report(request, pk):
-    # Ambil data lama berdasarkan ID (pk)
-    report = get_object_or_404(Report, id=pk)
-    
-    if request.method == 'POST':
-        # Isi form pake data POST + instance data lama
-        form = ReportForm(request.POST, instance=report)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Laporan berhasil diperbarui!')
-            return redirect('list_reports') # Sesuaikan nama name di urls.py lo
-    else:
-        # Tampilkan form yang udah ada isinya (data lama)
-        form = ReportForm(instance=report)
-    
-    return render(request, 'main_app/add_report.html', {'form': form, 'title': 'Edit Laporan'})
-
-# Fungsi Delete
-def delete_report(request, pk):
-    report = get_object_or_404(Report, id=pk)
-    if request.method == 'POST':
-        report.delete()
-        messages.warning(request, 'Laporan telah dihapus!')
-        return redirect('list_reports') # Sesuaikan nama name di urls.py lo
-    
-    return render(request, 'main_app/delete_confirm.html', {'report': report})
+    def delete(self, request, *args, **kwargs):
+        messages.warning(self.request, 'Laporan telah dihapus!')
+        return super().delete(request, *args, **kwargs)
