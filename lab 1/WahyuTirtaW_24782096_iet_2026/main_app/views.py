@@ -1,9 +1,13 @@
+from urllib import request
 import django
 from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
 from .models import Report
 from .form import ReportForm
 from django.contrib import messages 
 from django.shortcuts import get_object_or_404
+from django.views import View
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 # Create your views here.
 def home(request):
@@ -14,19 +18,16 @@ def home(request):
         }
     return render(request, 'main_app/index.html', context)
 
+class ReportCreateView(CreateView):
 # Create
-def add_Report(request):
-    if request.method == 'POST':
-        form = ReportForm(request.POST)
-        if form.is_valid():
-            form.save() # Menyimpan data ke database
-            # Kasih pesan sukses
-            messages.success(request, 'Wih mantap, laporan lo udah masuk ke database!')
-            return redirect('home') # Mengarahkan kembali ke halaman utama setelah berhasil menyimpan
-    else:
-        form = ReportForm()
-    return render(request,
-                  'main_app/add_report.html',{'form': form})
+    model = Report
+    form_class = ReportForm
+    template_name = 'main_app/add_report.html'
+    success_url = reverse_lazy('list_reports') # balik ke daftar setelah submit
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Laporan berhasil dibuat!')
+        return super().form_valid(form)
 
 # Read
 def list_Report(request):
