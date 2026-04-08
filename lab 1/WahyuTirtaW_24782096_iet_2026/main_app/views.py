@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from .models import Report
 from .form import ReportForm
 from django.contrib import messages 
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -53,3 +53,11 @@ class ReportDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.warning(self.request, 'Laporan telah dihapus!')
         return super().delete(request, *args, **kwargs)
+
+class ReportUpdateStatusView(View):
+    def post(self, request, pk):
+        report = get_object_or_404(Report, pk=pk)
+        new_status = request.POST.get('status')
+        report.status = new_status
+        report.save()
+        return redirect('list_reports')
