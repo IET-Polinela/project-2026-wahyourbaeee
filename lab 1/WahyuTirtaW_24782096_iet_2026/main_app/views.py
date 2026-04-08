@@ -29,13 +29,21 @@ class ReportCreateView(CreateView):
         messages.success(self.request, 'Laporan berhasil dibuat!')
         return super().form_valid(form)
 
+class ReportListView(ListView):
 # Read
-def list_Report(request):
-    # INI BARIS YANG KURANG: Ambil semua data dari PostgreSQL
-    data_laporan = Report.objects.all() 
-    
-    # Masukin data_laporan ke dalam context (dictionary) biar bisa dibaca HTML
-    return render(request, 'main_app/list_report.html', {'laporan': data_laporan})
+    model = Report
+    template_name = 'main_app/list_report.html'
+    context_object_name = 'laporan' # Biar html bisa panggil 'laporan'
+
+class ReportUpdateView(UpdateView):
+    model = Report
+    template_name = "main_app/add_report.html"
+    form_class = ReportForm
+    success_url = reverse_lazy('list_reports')
+
+    def form_valid(self, form): 
+        messages.success(self.request, 'Laporan berhasil diperbarui!')
+        return super().form_valid(form)
 
 # Fungsi Update
 def update_report(request, pk):
