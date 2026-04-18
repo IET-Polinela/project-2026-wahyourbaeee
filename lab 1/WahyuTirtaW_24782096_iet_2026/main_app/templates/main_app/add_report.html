@@ -16,8 +16,9 @@
   <div class="col-md-8">
     <div class="card shadow border-0 p-4">
       <h1 class="mb-4 fw-bold text-primary">
-        {% if form.instance.pk %}<i class="bi bi-pencil-square"></i> Edit{% else
-        %}<i class="bi bi-plus-circle"></i> Tambah{% endif %} Laporan
+        {% if form.instance.pk %}
+        <i class="bi bi-pencil-square"></i> Edit Laporan {% else %}
+        <i class="bi bi-plus-circle"></i> Tambah Laporan {% endif %}
       </h1>
 
       <form method="POST" id="reportForm">
