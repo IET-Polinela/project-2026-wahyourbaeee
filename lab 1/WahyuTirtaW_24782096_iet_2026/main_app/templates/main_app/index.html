@@ -1,59 +1,15 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>{{ title }}</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    />
-  </head>
-  <body>
-    <div class="container mt-5">
-      {% if messages %} {% for message in messages %}
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
-      {% endfor %} {% endif %}
-
-      <h1 class="mb-4">{{ heading }}</h1>
-      <p>
-        {{description}}
-        <a href="#" class="btn btn-primary">Pelajari Lebih Lanjut</a>
-      </p>
-    </div>
-    <div class="container mt-4 d-flex justify-content-center">
-      <a href="/add/" class="btn btn-success">Buat Laporan Baru</a>
-      <a href="/list/" class="btn btn-warning">Lihat Semua Laporan</a>
-      <a href="/abouts/" class="btn btn-info me-2">About</a>
-      <a href="/contacts/" class="btn btn-secondary">Contact Us</a>
-    </div>
-    <script>
-      // Tunggu sampai halaman selesai dimuat
-      document.addEventListener("DOMContentLoaded", function () {
-        // Cari semua elemen alert
-        const alerts = document.querySelectorAll(".alert");
-
-        alerts.forEach(function (alert) {
-          // Set timer 3000ms (3 detik)
-          setTimeout(function () {
-            // Tambahkan efek fade out Bootstrap
-            alert.classList.remove("show");
-            alert.classList.add("fade");
-
-            // Hapus elemen dari layar setelah animasi selesai (0.5 detik kemudian)
-            setTimeout(function () {
-              alert.remove();
-            }, 500);
-          }, 3000);
-        });
-      });
-    </script>
-  </body>
-</html>
+{% extends 'base.html' %} {% block content %}
+<div class="jumbotron mt-4 p-5 bg-light rounded shadow-sm">
+  <h1 class="display-4 fw-bold text-primary">{{ heading }}</h1>
+  <p class="lead mt-3">{{ description }}</p>
+  <hr class="my-4" />
+  <div class="d-flex gap-3 mt-4">
+    <a href="{% url 'add_report' %}" class="btn btn-success btn-lg shadow-sm">
+      <i class="bi bi-plus-circle"></i> Buat Laporan Baru
+    </a>
+    <a href="{% url 'list_reports' %}" class="btn btn-warning btn-lg shadow-sm">
+      <i class="bi bi-table"></i> Lihat Semua Laporan
+    </a>
+  </div>
+</div>
+{% endblock %}
