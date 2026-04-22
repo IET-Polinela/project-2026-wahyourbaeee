@@ -125,3 +125,5 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 AUTH_USER_MODEL = 'usermanagement_24782096.User'
+LOGIN_REDIRECT_URL = 'list_reports' # Nama path daftar laporan 
+LOGOUT_REDIRECT_URL = 'login'
