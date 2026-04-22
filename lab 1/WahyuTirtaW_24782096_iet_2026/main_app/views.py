@@ -29,6 +29,13 @@ class ReportCreateView(CreateView):
         messages.success(self.request, 'Laporan berhasil dibuat!')
         return super().form_valid(form)
 
+    def dispatch(self, request, *args, **kwargs):
+        # Cek apakah user punya status is_admin=True
+        if not request.user.is_authenticated or not request.user.is_admin:
+            messages.error(request, "Akses Ditolak: Hanya Admin yang boleh menambah laporan!") 
+            return redirect('list_reports')
+        return super().dispatch(request, *args, **kwargs)
+    
 class ReportListView(ListView):
 # Read
     model = Report
@@ -44,6 +51,11 @@ class ReportUpdateView(UpdateView):
     def form_valid(self, form): 
         messages.success(self.request, 'Laporan berhasil diperbarui!')
         return super().form_valid(form)
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated or not request.user.is_admin:
+            messages.error(request, "Akses Ditolak: Anda tidak memiliki izin untuk mengedit!") 
+            return redirect('list_reports')
+        return super().dispatch(request, *args, **kwargs)
     
 class ReportDeleteView(DeleteView):
     model = Report
@@ -53,6 +65,11 @@ class ReportDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.warning(self.request, 'Laporan telah dihapus!')
         return super().delete(request, *args, **kwargs)
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated or not request.user.is_admin:
+            messages.error(request, "Akses Ditolak: Fitur hapus hanya untuk Admin!") 
+            return redirect('list_reports')
+        return super().dispatch(request, *args, **kwargs)
 
 class ReportUpdateStatusView(View):
     def post(self, request, pk):
