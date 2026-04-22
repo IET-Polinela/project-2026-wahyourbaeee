@@ -11,3 +11,4 @@ urlpatterns = [
     path('contacts/', include('contacts.urls')),
     path('abouts/', include('about.urls')),
 ]
+
