@@ -2,6 +2,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.views.debug import default_urlconf
+from django.contrib.auth import views as auth_views
 
 
 
@@ -10,5 +11,7 @@ urlpatterns = [
     path('', include('main_app.urls')),
     path('contacts/', include('contacts.urls')),
     path('abouts/', include('about.urls')),
+    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
 

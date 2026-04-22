@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'WahyuTirtaW_24782096_iet_2026.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Smart_db', # Ganti dengan nama database PostgreSQL Anda
+        'NAME': 'Theotown_city', # Ganti dengan nama database PostgreSQL Anda
         'USER': 'postgres',
         'PASSWORD': 'Kopi23', # Ganti dengan password PostgreSQL 
         'HOST': 'localhost', 
@@ -123,3 +123,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+AUTH_USER_MODEL = 'usermanagement_24782096.User'
