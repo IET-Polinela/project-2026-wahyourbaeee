@@ -1,4 +1,3 @@
-from urllib import request
 import django
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
@@ -8,6 +7,8 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+
+from main_app import form
 
 # Create your views here.
 def home(request):
@@ -44,7 +45,7 @@ class ReportListView(ListView):
 
 class ReportUpdateView(UpdateView):
     model = Report
-    template_name = "main_app/add_report.html"
+    template_name = "main_app/List_report.html"
     form_class = ReportForm
     success_url = reverse_lazy('list_reports')
 
@@ -62,9 +63,9 @@ class ReportDeleteView(DeleteView):
     template_name = "main_app/delete_confirm.html"
     success_url = reverse_lazy('list_reports')
 
-    def delete(self, request, *args, **kwargs):
+    def form_valid(self, form):
         messages.warning(self.request, 'Laporan telah dihapus!')
-        return super().delete(request, *args, **kwargs)
+        return super().form_valid(form)
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated or not request.user.is_admin:
             messages.error(request, "Akses Ditolak: Fitur hapus hanya untuk Admin!") 

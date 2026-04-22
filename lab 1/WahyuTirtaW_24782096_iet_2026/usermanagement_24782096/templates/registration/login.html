@@ -1,26 +1,100 @@
-{% extends 'base.html' %} {% block title %}Login | TheoTown City{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Login | TheoTown City{% endblock %}
+
 {% block content %}
-<div class="row justify-content-center mt-5">
-  <div class="col-md-4">
-    <div class="card shadow border-0">
-      <div class="card-body p-5">
-        <h3 class="text-center fw-bold mb-4">Login</h3>
+<div class="row justify-content-center" style="margin-top: 4rem;">
+  <div class="col-md-5 col-lg-4">
+
+    <!-- Header -->
+    <div class="text-center mb-4">
+      <div class="mx-auto mb-3 d-flex align-items-center justify-content-center rounded-3"
+        style="width:54px;height:54px;background:linear-gradient(135deg,#3b82f6,#0ea5e9);box-shadow:0 4px 16px rgba(59,130,246,0.35);">
+        <i class="bi bi-shield-lock text-white fs-4"></i>
+      </div>
+      <h4 class="fw-bold text-dark mb-1">Selamat Datang</h4>
+      <p class="text-muted small">Masuk ke akun TheoTown kamu</p>
+    </div>
+
+    <!-- Card -->
+    <div class="card border-0 shadow-sm" style="border-radius:16px;">
+      <div class="card-body p-4">
         <form method="post">
           {% csrf_token %}
+
+          <!-- Username -->
           <div class="mb-3">
-            <label class="form-label">Username</label>
-            {{ form.username }}
+            <label class="form-label fw-semibold text-dark small">Username</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0 text-muted">
+                <i class="bi bi-person"></i>
+              </span>
+              <input
+                type="text"
+                name="username"
+                class="form-control border-start-0 bg-light ps-0"
+                placeholder="Masukkan username"
+                autofocus
+                required
+                style="border-radius:0 8px 8px 0;"
+              />
+            </div>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Password</label>
-            {{ form.password }}
+
+          <!-- Password -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold text-dark small">Password</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0 text-muted">
+                <i class="bi bi-lock"></i>
+              </span>
+              <input
+                type="password"
+                name="password"
+                id="passwordInput"
+                class="form-control border-start-0 bg-light ps-0"
+                placeholder="Masukkan password"
+                required
+                style="border-radius:0 0 0 0;"
+              />
+              <button
+                type="button"
+                class="input-group-text bg-light border-start-0 text-muted"
+                onclick="togglePassword()"
+                style="cursor:pointer;border-radius:0 8px 8px 0;"
+                title="Tampilkan/sembunyikan password"
+              >
+                <i class="bi bi-eye" id="eyeIcon"></i>
+              </button>
+            </div>
           </div>
-          <button type="submit" class="btn btn-primary w-100 py-2 mt-3">
-            Masuk
+
+          <button type="submit" class="btn btn-primary w-100 fw-semibold py-2" style="border-radius:10px;">
+            <i class="bi bi-lightning-charge me-1"></i> Masuk
           </button>
         </form>
       </div>
     </div>
+
+    <!-- Footer link -->
+    <p class="text-center text-muted small mt-3">
+      Belum punya akun?
+      <a href="{% url 'register' %}" class="text-primary fw-semibold text-decoration-none">Daftar sekarang</a>
+    </p>
+
   </div>
 </div>
+
+<script>
+  function togglePassword() {
+    const input = document.getElementById('passwordInput');
+    const icon  = document.getElementById('eyeIcon');
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.className = 'bi bi-eye-slash';
+    } else {
+      input.type = 'password';
+      icon.className = 'bi bi-eye';
+    }
+  }
+</script>
 {% endblock %}
