@@ -8,3 +8,6 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = BaseUserAdmin.fieldsets + (
         ('Custom Role', {'fields': ('is_admin', 'is_member')}),
     )
+    add_fieldsets = BaseUserAdmin.add_fieldsets + (
+        ('Custom Role', {'fields': ('is_admin', 'is_member')}),
+    )
