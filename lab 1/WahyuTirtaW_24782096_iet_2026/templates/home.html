@@ -1,25 +1,434 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>T-Map</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    />
-  </head>
-  <body>
-    <div class="container mt-5">
-      <h1 class="mb-4">Selamat Datang di T-Map</h1>
-      <p>
-        Halo, ini adalah home.html di templates folder project.<br />
+{% extends 'base.html' %} {% block title %}Beranda | TheoTown T-MAP {%endblock%}
+{% block content %}
 
-        <a href="#" class="btn btn-primary">Pelajari Lebih Lanjut</a>
+<style>
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0c4a6e 100%);
+    border-radius: 20px;
+    padding: 4rem 3rem;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 3rem;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(
+        circle at 70% 50%,
+        rgba(6, 182, 212, 0.15) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        circle at 20% 80%,
+        rgba(59, 130, 246, 0.12) 0%,
+        transparent 50%
+      );
+    pointer-events: none;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(6, 182, 212, 0.15);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    color: #67e8f9;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    letter-spacing: 0.06em;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero h1 {
+    font-family: "Sora", sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .hero h1 span {
+    color: #38bdf8;
+  }
+
+  .hero p {
+    font-size: 1.05rem;
+    color: #94a3b8;
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .hero-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .btn-hero-primary {
+    background: linear-gradient(135deg, #3b82f6, #06b6d4);
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.6rem;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.925rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+    transition: all 0.2s;
+  }
+
+  .btn-hero-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.45);
+    color: #fff;
+  }
+
+  .btn-hero-ghost {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.7rem 1.6rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.925rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s;
+  }
+
+  .btn-hero-ghost:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+  }
+
+  /* Hero stats */
+  .hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .hero-stat-num {
+    font-family: "Sora", sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #38bdf8;
+    line-height: 1;
+  }
+
+  .hero-stat-label {
+    font-size: 0.78rem;
+    color: #64748b;
+    margin-top: 2px;
+  }
+
+  /* ── Feature cards ── */
+  .feature-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: all 0.25s;
+    height: 100%;
+  }
+
+  .feature-card:hover {
+    border-color: #bfdbfe;
+    box-shadow: 0 8px 30px rgba(59, 130, 246, 0.1);
+    transform: translateY(-3px);
+  }
+
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  .feature-card h5 {
+    font-family: "Sora", sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .feature-card p {
+    font-size: 0.875rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ── Status pills ── */
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  /* ── CTA Banner ── */
+  .cta-banner {
+    background: linear-gradient(135deg, #1d4ed8, #0891b2);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-banner::before {
+    content: "";
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+  }
+
+  .section-title {
+    font-family: "Sora", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+
+  .section-sub {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-bottom: 1.75rem;
+  }
+</style>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="row align-items-center hero-content">
+    <div class="col-lg-7">
+      <div class="hero-tag">
+        <i class="bi bi-broadcast"></i> Sistem Aktif &amp; Real-Time
+      </div>
+      <h1>Platform Kota Cerdas<br /><span>TheoTown T-MAP</span></h1>
+      <p>
+        Laporkan, pantau, dan selesaikan masalah infrastruktur kota secara
+        digital. Bersama wargakan kota yang lebih responsif, transparan, dan
+        berkelanjutan.
       </p>
+      <div class="hero-btns">
+        <a href="{% url 'list_reports' %}" class="btn-hero-primary">
+          <i class="bi bi-clipboard-plus"></i> Lihat Laporan
+        </a>
+        <a href="{% url 'dashboard_index' %}" class="btn-hero-ghost">
+          <i class="bi bi-speedometer2"></i> Buka Dashboard
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">1,502+</div>
+          <div class="hero-stat-label">Total Laporan</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">5</div>
+          <div class="hero-stat-label">Kategori Masalah</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">24/7</div>
+          <div class="hero-stat-label">Sistem Aktif</div>
+        </div>
+      </div>
     </div>
-    <div class="container mt-4 d-flex justify-content-center">
-      <a href="/abouts/" class="btn btn-info me-2">About</a>
-      <a href="/contacts/" class="btn btn-secondary">Contact Us</a>
+    <div class="col-lg-5 mt-4 mt-lg-0 text-center">
+      <div style="font-size: 9rem; opacity: 0.15; line-height: 1">🏙️</div>
     </div>
-  </body>
-</html>
+  </div>
+</div>
+
+<!-- ══ FEATURES ══ -->
+<div class="mb-5">
+  <h2 class="section-title">Fitur Unggulan Platform</h2>
+  <p class="section-sub">
+    Semua yang kamu butuhkan untuk partisipasi warga yang efektif
+  </p>
+
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-icon" style="background: #eff6ff">
+          <i class="bi bi-megaphone" style="color: #3b82f6"></i>
+        </div>
+        <h5>Pelaporan Mudah</h5>
+        <p>
+          Kirim laporan masalah infrastruktur kota kapan saja, di mana saja.
+          Cukup isi form singkat dan laporan langsung tercatat.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-icon" style="background: #f0fdf4">
+          <i class="bi bi-graph-up-arrow" style="color: #10b981"></i>
+        </div>
+        <h5>Dashboard Statistik</h5>
+        <p>
+          Visualisasi data laporan secara real-time dengan grafik interaktif.
+          Pantau progress penanganan setiap isu kota.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-icon" style="background: #fff7ed">
+          <i class="bi bi-shield-check" style="color: #f59e0b"></i>
+        </div>
+        <h5>Otorisasi Peran</h5>
+        <p>
+          Sistem keamanan berbasis peran — Citizen dapat memantau, Admin
+          memiliki hak penuh untuk mengelola setiap laporan.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-icon" style="background: #fdf4ff">
+          <i class="bi bi-search" style="color: #a855f7"></i>
+        </div>
+        <h5>Pencarian Instan</h5>
+        <p>
+          Temukan laporan secara langsung tanpa reload halaman menggunakan
+          teknologi Live Search berbasis Fetch API.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-icon" style="background: #fff1f2">
+          <i class="bi bi-arrow-repeat" style="color: #ef4444"></i>
+        </div>
+        <h5>Update Status</h5>
+        <p>
+          Alur status laporan yang jelas: Reported → Verified → In Progress →
+          Resolved. Warga dapat memantau perkembangan setiap saat.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-icon" style="background: #ecfeff">
+          <i class="bi bi-people" style="color: #06b6d4"></i>
+        </div>
+        <h5>Partisipasi Warga</h5>
+        <p>
+          Daftarkan diri sebagai warga kota, pantau isu di sekitar kamu, dan
+          berpartisipasi aktif membangun kota yang lebih baik.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STATUS GUIDE ══ -->
+<div class="mb-5">
+  <h2 class="section-title">Alur Status Laporan</h2>
+  <p class="section-sub">
+    Setiap laporan melewati tahapan penanganan yang transparan
+  </p>
+
+  <div class="bg-white border rounded-3 p-4">
+    <div
+      class="d-flex flex-wrap align-items-center gap-3 justify-content-center"
+    >
+      <span class="status-pill" style="background: #f1f5f9; color: #475569">
+        <i class="bi bi-record-circle"></i> Reported
+      </span>
+      <i class="bi bi-arrow-right text-muted"></i>
+      <span class="status-pill" style="background: #eff6ff; color: #1d4ed8">
+        <i class="bi bi-patch-check"></i> Verified
+      </span>
+      <i class="bi bi-arrow-right text-muted"></i>
+      <span class="status-pill" style="background: #fffbeb; color: #d97706">
+        <i class="bi bi-gear"></i> In Progress
+      </span>
+      <i class="bi bi-arrow-right text-muted"></i>
+      <span class="status-pill" style="background: #f0fdf4; color: #15803d">
+        <i class="bi bi-check-circle"></i> Resolved
+      </span>
+    </div>
+    <p class="text-center text-muted small mt-3 mb-0">
+      Admin akan memverifikasi dan memproses laporan. Warga dapat memantau
+      status kapan saja.
+    </p>
+  </div>
+</div>
+
+<!-- ══ CTA ══ -->
+{% if not user.is_authenticated %}
+<div class="cta-banner mb-4">
+  <i
+    class="bi bi-person-badge"
+    style="font-size: 2.5rem; opacity: 0.8; display: block; margin-bottom: 1rem"
+  ></i>
+  <h3 class="fw-bold mb-2" style="font-family: &quot;Sora&quot;, sans-serif">
+    Bergabung sebagai Warga Digital
+  </h3>
+  <p
+    style="
+      color: rgba(255, 255, 255, 0.7);
+      max-width: 480px;
+      margin: 0 auto 1.5rem;
+    "
+  >
+    Daftarkan diri kamu dan mulai berkontribusi untuk kota yang lebih baik.
+    Gratis dan mudah!
+  </p>
+  <div class="d-flex gap-3 justify-content-center flex-wrap">
+    <a href="{% url 'register' %}" class="btn btn-light fw-bold px-4">
+      <i class="bi bi-person-plus me-1"></i> Daftar Sekarang
+    </a>
+    <a href="{% url 'login' %}" class="btn btn-outline-light px-4">
+      <i class="bi bi-box-arrow-in-right me-1"></i> Sudah Punya Akun
+    </a>
+  </div>
+</div>
+{% endif %} {% endblock %}
