@@ -1,19 +1,59 @@
 {% extends 'base.html' %} {% block content %}
 <div class="container mt-4">
-  <h2 class="mb-4">Dashboard Statistik Laporan</h2>
+  <h2 class="fw-bold mb-4">City Dashboard</h2>
 
-  <div class="row mb-5">
+  <div class="row g-4 mb-5">
     <div class="col-md-6">
-      <div class="card shadow-sm p-3">
-        <h5 class="text-center">Distribusi Status Laporan</h5>
+      <div class="card shadow-sm border-0 p-3">
+        <h5 class="text-center mb-3">Distribusi Status Laporan</h5>
         <canvas id="statusChart"></canvas>
       </div>
     </div>
 
     <div class="col-md-6">
-      <div class="card shadow-sm p-3">
-        <h5 class="text-center">Jumlah Laporan per Kategori</h5>
+      <div class="card shadow-sm border-0 p-3">
+        <h5 class="text-center mb-3">Jumlah Laporan per Kategori</h5>
         <canvas id="categoryChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+          5 Laporan Terbaru (REPORTED)
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-hover mb-0" id="tableReported">
+            <thead class="table-light">
+              <tr>
+                <th>Judul</th>
+                <th>Lokasi</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-success text-white">
+          5 Laporan Selesai (RESOLVED)
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-hover mb-0" id="tableResolved">
+            <thead class="table-light">
+              <tr>
+                <th>Judul</th>
+                <th>Lokasi</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -23,50 +63,51 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    // 1. Ambil data dari backend (JsonResponse)
-    fetch("/dashboard/data/") // Sesuaikan dengan URL yang lo buat di urls.py
+    // Memanggil data dari URL JsonResponse
+    fetch("{% url 'dashboard_data' %}")
       .then((response) => response.json())
       .then((data) => {
-        // 2. Olah data untuk Status Chart (Doughnut)
-        const statusLabels = data.status_data.map((item) => item.status);
-        const statusTotals = data.status_data.map((item) => item.total);
-
+        // 1. Render Status Chart (Doughnut)
         new Chart(document.getElementById("statusChart"), {
           type: "doughnut",
           data: {
-            labels: statusLabels,
+            labels: data.status_data.map((item) => item.status),
             datasets: [
               {
-                label: "Jumlah Laporan",
-                data: statusTotals,
-                backgroundColor: ["#6c757d", "#007bff", "#ffc107", "#28a745"],
+                data: data.status_data.map((item) => item.total),
+                backgroundColor: ["#f39c12", "#3498db", "#e67e22", "#2ecc71"],
               },
             ],
           },
         });
 
-        // 3. Olah data untuk Kategori Chart (Bar)
-        const catLabels = data.category_data.map((item) => item.category);
-        const catTotals = data.category_data.map((item) => item.total);
-
+        // 2. Render Category Chart (Bar)
         new Chart(document.getElementById("categoryChart"), {
           type: "bar",
           data: {
-            labels: catLabels,
+            labels: data.category_data.map((item) => item.category),
             datasets: [
               {
-                label: "Total Laporan",
-                data: catTotals,
-                backgroundColor: "#17a2b8",
+                label: "Jumlah Laporan",
+                data: data.category_data.map((item) => item.total),
+                backgroundColor: "#34495e",
               },
             ],
           },
-          options: {
-            scales: { y: { beginAtZero: true } },
-          },
         });
-      })
-      .catch((error) => console.error("Error fetching data:", error));
+
+        // 3. Isi Tabel Terbaru
+        const reportedBody = document.querySelector("#tableReported tbody");
+        data.latest_reported.forEach((item) => {
+          reportedBody.innerHTML += `<tr><td>${item.title}</td><td>${item.location}</td></tr>`;
+        });
+
+        // 4. Isi Tabel Selesai
+        const resolvedBody = document.querySelector("#tableResolved tbody");
+        data.latest_resolved.forEach((item) => {
+          resolvedBody.innerHTML += `<tr><td>${item.title}</td><td>${item.location}</td></tr>`;
+        });
+      });
   });
 </script>
 {% endblock %}
