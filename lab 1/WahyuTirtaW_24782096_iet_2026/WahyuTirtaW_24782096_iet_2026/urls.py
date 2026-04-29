@@ -12,6 +12,7 @@ urlpatterns = [
     path('', include('main_app.urls')),
     path('contacts/', include('contacts.urls')),
     path('abouts/', include('about.urls')),
+    path('dashboard/', include('dashboard_24782096.urls')),
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('register/', register_citizen, name='register'),
