@@ -63,10 +63,11 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    // Memanggil data dari URL JsonResponse
     fetch("{% url 'dashboard_data' %}")
       .then((response) => response.json())
       .then((data) => {
+        console.log("Dashboard JSON data:", data);
+
         // 1. Render Status Chart (Doughnut)
         new Chart(document.getElementById("statusChart"), {
           type: "doughnut",
@@ -96,13 +97,13 @@
           },
         });
 
-        // 3. Isi Tabel Terbaru
+        // 3. Isi Tabel REPORTED
         const reportedBody = document.querySelector("#tableReported tbody");
         data.latest_reported.forEach((item) => {
           reportedBody.innerHTML += `<tr><td>${item.title}</td><td>${item.location}</td></tr>`;
         });
 
-        // 4. Isi Tabel Selesai
+        // 4. Isi Tabel RESOLVED
         const resolvedBody = document.querySelector("#tableResolved tbody");
         data.latest_resolved.forEach((item) => {
           resolvedBody.innerHTML += `<tr><td>${item.title}</td><td>${item.location}</td></tr>`;

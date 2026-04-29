@@ -40,12 +40,12 @@ class ReportCreateView(CreateView):
 class ReportListView(ListView):
 # Read
     model = Report
-    template_name = 'main_app/list_report.html'
+    template_name = 'main_app/List_report.html'
     context_object_name = 'laporan' # Biar html bisa panggil 'laporan'
 
 class ReportUpdateView(UpdateView):
     model = Report
-    template_name = "main_app/List_report.html"
+    template_name = "main_app/add_report.html"
     form_class = ReportForm
     success_url = reverse_lazy('list_reports')
 
@@ -79,3 +79,4 @@ class ReportUpdateStatusView(View):
         report.status = new_status
         report.save()
         return redirect('list_reports')
+    
