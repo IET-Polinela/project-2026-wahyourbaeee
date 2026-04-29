@@ -1,0 +1,72 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Dashboard Statistik Laporan</h2>
+
+  <div class="row mb-5">
+    <div class="col-md-6">
+      <div class="card shadow-sm p-3">
+        <h5 class="text-center">Distribusi Status Laporan</h5>
+        <canvas id="statusChart"></canvas>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow-sm p-3">
+        <h5 class="text-center">Jumlah Laporan per Kategori</h5>
+        <canvas id="categoryChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // 1. Ambil data dari backend (JsonResponse)
+    fetch("/dashboard/data/") // Sesuaikan dengan URL yang lo buat di urls.py
+      .then((response) => response.json())
+      .then((data) => {
+        // 2. Olah data untuk Status Chart (Doughnut)
+        const statusLabels = data.status_data.map((item) => item.status);
+        const statusTotals = data.status_data.map((item) => item.total);
+
+        new Chart(document.getElementById("statusChart"), {
+          type: "doughnut",
+          data: {
+            labels: statusLabels,
+            datasets: [
+              {
+                label: "Jumlah Laporan",
+                data: statusTotals,
+                backgroundColor: ["#6c757d", "#007bff", "#ffc107", "#28a745"],
+              },
+            ],
+          },
+        });
+
+        // 3. Olah data untuk Kategori Chart (Bar)
+        const catLabels = data.category_data.map((item) => item.category);
+        const catTotals = data.category_data.map((item) => item.total);
+
+        new Chart(document.getElementById("categoryChart"), {
+          type: "bar",
+          data: {
+            labels: catLabels,
+            datasets: [
+              {
+                label: "Total Laporan",
+                data: catTotals,
+                backgroundColor: "#17a2b8",
+              },
+            ],
+          },
+          options: {
+            scales: { y: { beginAtZero: true } },
+          },
+        });
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  });
+</script>
+{% endblock %}
