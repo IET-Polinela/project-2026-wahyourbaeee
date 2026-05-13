@@ -6,9 +6,7 @@ class ReportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Report
-        fields = ['id', 'title', 'category', 
-                  'description', 'location', 'status', 'reporter',
-                  'created_at', 'update_at']
+        fields = ['id', 'title', 'category', 'description', 'location', 'status', 'reporter', 'created_at', 'updated_at']
         
     def get_reporter(self, obj):
         return "Warga Anonim"

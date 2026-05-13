@@ -10,6 +10,7 @@ from usermanagement_24782096.views import register_citizen
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main_app.urls')),
+    path('api/', include('main_app.api_urls')),
     path('contacts/', include('contacts.urls')),
     path('abouts/', include('about.urls')),
     path('dashboard/', include('dashboard_24782096.urls')),
