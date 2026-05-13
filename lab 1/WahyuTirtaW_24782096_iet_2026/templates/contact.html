@@ -1,63 +1,142 @@
-{% extends 'base.html' %}
-
-{% block title %}About | TheoTown City{% endblock %}
-
-{% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="text-center mb-5">
-                <h1 class="fw-bold text-primary">Tentang TheoTown City</h1>
-                <p class="lead text-muted">Sistem Pelaporan Warga untuk Kota yang Lebih Baik</p>
-                <hr class="w-25 mx-auto">
-            </div>
-
-            <div class="row g-4 align-items-center">
-                <div class="col-md-6">
-                    <h3 class="fw-bold">Misi Kami</h3>
-                    <p class="text-secondary">
-                        TheoTown City hadir sebagai jembatan komunikasi antara warga dan pemerintah kota. 
-                        Kami percaya bahwa setiap laporan, mulai dari jalan rusak hingga masalah kebersihan, 
-                        adalah langkah penting menuju pembangunan kota yang lebih responsif dan transparan.
-                    </p>
-                    <ul class="list-unstyled">
-                        <li><i class="bi bi-check-circle-fill text-success"></i> Pelaporan Cepat & Mudah</li>
-                        <li><i class="bi bi-check-circle-fill text-success"></i> Transparansi Status Penanganan</li>
-                        <li><i class="bi bi-check-circle-fill text-success"></i> Dashboard Data Real-time</li>
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <div class="card border-0 shadow-sm bg-light p-4">
-                        <h5 class="fw-bold mb-3">Teknologi yang Digunakan</h5>
-                        <div class="d-flex flex-wrap gap-2">
-                            <span class="badge bg-dark">Django 5.0</span>
-                            <span class="badge bg-primary">Bootstrap 5</span>
-                            <span class="badge bg-warning text-dark">JavaScript (Fetch API)</span>
-                            <span class="badge bg-info text-dark">Chart.js</span>
-                            <span class="badge bg-secondary">PostgreSQL</span>
-                        </div>
-                        <p class="mt-3 small text-muted">
-                            Aplikasi ini dikembangkan menggunakan arsitektur modern untuk memastikan 
-                            keamanan data dan performa yang optimal.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-5 pt-5 border-top">
-                <h4 class="text-center fw-bold mb-4">Pengembang</h4>
-                <div class="card mx-auto shadow-sm border-0" style="max-width: 400px;">
-                    <div class="card-body text-center p-4">
-                        <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                            <i class="bi bi-person-fill fs-1"></i>
-                        </div>
-                        <h5 class="fw-bold mb-0">Wahyu Tirta W.</h5>
-                        <p class="text-muted mb-2">NPM: 24782096</p>
-                        <p class="small text-secondary mb-0">Teknologi Rekayasa Internet 2026</p>
-                    </div>
-                </div>
-            </div>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Contact Us</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        background: #f4f6fb;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .contact-container {
+        max-width: 500px;
+        margin: 60px auto;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(60, 72, 88, 0.15);
+        padding: 40px 32px;
+      }
+      .contact-container h2 {
+        margin-bottom: 24px;
+        color: #2d3748;
+        font-weight: 700;
+        text-align: center;
+      }
+      .form-group {
+        margin-bottom: 18px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        color: #4a5568;
+        font-size: 15px;
+      }
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 16px;
+        background: #f7fafc;
+        transition: border-color 0.2s;
+      }
+      .form-group input:focus,
+      .form-group textarea:focus {
+        border-color: #3182ce;
+        outline: none;
+      }
+      .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+      .contact-btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(90deg, #3182ce 0%, #63b3ed 100%);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 17px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .contact-btn:hover {
+        background: linear-gradient(90deg, #2563eb 0%, #4299e1 100%);
+      }
+      @media (max-width: 600px) {
+        .contact-container {
+          padding: 24px 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="contact-container">
+      <h2>Contact Us</h2>
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            placeholder="Your Name"
+          />
         </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            placeholder="you@example.com"
+          />
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea
+            id="message"
+            name="message"
+            required
+            placeholder="Type your message..."
+          ></textarea>
+        </div>
+        <button type="submit" class="contact-btn">Send Message</button>
+        <div style="display: flex; gap: 10px; margin-top: 16px">
+          <a
+            href="/"
+            class="contact-btn"
+            style="
+              background: #e2e8f0;
+              color: #4a5568;
+              flex: 1;
+              text-align: center;
+              text-decoration: none;
+            "
+            >Home</a
+          >
+          <a
+            href="/abouts/"
+            class="contact-btn"
+            style="
+              background: #e2e8f0;
+              color: #4a5568;
+              flex: 1;
+              text-align: center;
+              text-decoration: none;
+            "
+            >About</a
+          >
+        </div>
+      </form>
     </div>
-</div>
-{% endblock %}
+  </body>
+</html>
