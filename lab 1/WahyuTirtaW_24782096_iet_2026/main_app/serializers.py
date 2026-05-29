@@ -10,3 +10,9 @@ class ReportSerializer(serializers.ModelSerializer):
         
     def get_reporter(self, obj):
         return "Warga Anonim"
+
+
+class ReportStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Report
+        fields = ['status']
