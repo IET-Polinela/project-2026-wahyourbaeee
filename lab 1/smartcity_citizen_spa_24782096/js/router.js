@@ -2,48 +2,49 @@
 // router.js - Hash-Based Routing SPA
 // ============================================================
 
-// Definisi semua route beserta konten HTML-nya
 const routes = {
 
     // ---- Halaman Login ----
     '#login': `
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-4">
-                <div class="card shadow-sm border-0 p-4">
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-5 col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4">
                     <div class="text-center mb-4">
-                        <i class="bi bi-shield-lock-fill text-primary" style="font-size: 2.5rem;"></i>
-                        <h4 class="fw-bold mb-0 mt-2">Login Warga</h4>
-                        <p class="text-muted small">Smart City Portal</p>
+                        <div class="mx-auto mb-3 d-flex align-items-center justify-content-center rounded-3"
+                            style="width:52px;height:52px;background:linear-gradient(135deg,#1d4ed8,#06b6d4);box-shadow:0 4px 14px rgba(29,78,216,.3);">
+                            <i class="bi bi-shield-lock-fill text-white fs-4"></i>
+                        </div>
+                        <h5 class="fw-bold mb-0">Login Warga</h5>
+                        <p class="text-muted small mt-1">Smart City Portal · PIE 1416</p>
                     </div>
-                    <div id="loginForm">
+
+                    <form id="loginForm">
                         <div class="mb-3">
-                            <label class="form-label fw-semibold">Username</label>
+                            <label class="form-label fw-semibold small" for="loginUsername">Username</label>
                             <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="bi bi-person-fill"></i>
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-person text-muted"></i>
                                 </span>
                                 <input type="text" id="loginUsername"
-                                    class="form-control"
-                                    placeholder="Masukkan username"
-                                    required>
+                                    class="form-control border-start-0"
+                                    placeholder="Masukkan username" required>
                             </div>
                         </div>
                         <div class="mb-4">
-                            <label class="form-label fw-semibold">Password</label>
+                            <label class="form-label fw-semibold small" for="loginPassword">Password</label>
                             <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="bi bi-lock-fill"></i>
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-lock text-muted"></i>
                                 </span>
                                 <input type="password" id="loginPassword"
-                                    class="form-control"
-                                    placeholder="Masukkan password"
-                                    required>
+                                    class="form-control border-start-0"
+                                    placeholder="Masukkan password" required>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100 fw-bold">
-                            <i class="bi bi-box-arrow-in-right me-1"></i>Masuk
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-lightning-charge me-1"></i>Masuk
                         </button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -55,19 +56,23 @@ const routes = {
 
             <!-- Kolom Kiri (25%) - Sidebar Aksi -->
             <aside class="col-12 col-lg-3">
-                <div class="card border-0 p-3 shadow-sm sticky-top" style="top: 20px;">
-                    <h6 class="fw-bold mb-3">
-                        <i class="bi bi-grid-fill me-2 text-primary"></i>Menu
+                <div class="card border-0 shadow-sm rounded-4 p-3 sticky-top" style="top:80px;">
+                    <h6 class="fw-bold mb-3 text-muted small text-uppercase ls-1">
+                        <i class="bi bi-grid me-1"></i>Menu
                     </h6>
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary btn-sm text-start">
+                        <button class="btn btn-primary btn-sm text-start rounded-3">
                             <i class="bi bi-plus-circle-fill me-2"></i>Laporan Baru
                         </button>
-                        <button class="btn btn-outline-secondary btn-sm text-start">
-                            <i class="bi bi-list-ul me-2"></i>Riwayat Laporan
+                        <button class="btn btn-light btn-sm text-start rounded-3 border">
+                            <i class="bi bi-list-ul me-2 text-muted"></i>Riwayat Laporan
                         </button>
-                        <button class="btn btn-outline-secondary btn-sm text-start">
-                            <i class="bi bi-person-fill me-2"></i>Profil Saya
+                        <button class="btn btn-light btn-sm text-start rounded-3 border">
+                            <i class="bi bi-person me-2 text-muted"></i>Profil Saya
+                        </button>
+                        <hr class="my-1">
+                        <button class="btn btn-light btn-sm text-start rounded-3 border text-danger" onclick="logout()">
+                            <i class="bi bi-box-arrow-right me-2"></i>Keluar
                         </button>
                     </div>
                 </div>
@@ -75,33 +80,40 @@ const routes = {
 
             <!-- Kolom Tengah (50%) - Konten Utama -->
             <section class="col-12 col-lg-6">
-                <div class="card border-0 p-4 shadow-sm text-center">
-                    <i class="bi bi-inbox fs-1 text-muted"></i>
-                    <h5 class="mt-3">Selamat Datang!</h5>
+                <div class="card border-0 shadow-sm rounded-4 p-4 text-center">
+                    <div class="mx-auto mb-3 d-flex align-items-center justify-content-center rounded-3"
+                        style="width:56px;height:56px;background:#f1f5f9;">
+                        <i class="bi bi-inbox fs-3 text-muted"></i>
+                    </div>
+                    <h5 class="fw-bold">Selamat Datang!</h5>
                     <p class="text-muted small">
                         Koneksi API untuk data laporan akan diimplementasikan pada Lab 12.
                     </p>
-                    <div class="alert alert-success d-flex align-items-center gap-2 text-start mt-2">
-                        <i class="bi bi-check-circle-fill"></i>
-                        <span>Login berhasil. Token JWT tersimpan di localStorage.</span>
+                    <div class="alert alert-success d-flex align-items-center gap-2 text-start rounded-3 mt-2 mb-0">
+                        <i class="bi bi-check-circle-fill text-success"></i>
+                        <span class="small">Login berhasil. Token JWT tersimpan di localStorage.</span>
                     </div>
                 </div>
             </section>
 
-            <!-- Kolom Kanan (25%) - Info & Pengumuman -->
+            <!-- Kolom Kanan (25%) - Pengumuman -->
             <aside class="col-12 col-lg-3">
-                <div class="card border-0 p-3 shadow-sm sticky-top" style="top: 20px;">
-                    <h6 class="fw-bold mb-3">
-                        <i class="bi bi-info-circle-fill me-2 text-info"></i>Pengumuman
+                <div class="card border-0 shadow-sm rounded-4 p-3 sticky-top" style="top:80px;">
+                    <h6 class="fw-bold mb-3 text-muted small text-uppercase">
+                        <i class="bi bi-megaphone me-1"></i>Pengumuman
                     </h6>
                     <div class="d-flex flex-column gap-2">
-                        <div class="p-2 bg-light rounded small">
-                            <i class="bi bi-megaphone-fill text-warning me-1"></i>
-                            Sistem pemeliharaan setiap Minggu 00.00 - 02.00 WIB
+                        <div class="p-2 rounded-3 bg-light small">
+                            <i class="bi bi-tools text-warning me-1"></i>
+                            Pemeliharaan sistem setiap Minggu 00.00–02.00 WIB
                         </div>
-                        <div class="p-2 bg-light rounded small">
+                        <div class="p-2 rounded-3 bg-light small">
                             <i class="bi bi-bell-fill text-primary me-1"></i>
-                            Lab 12 akan mengimplementasikan CRUD Laporan
+                            Lab 12: implementasi CRUD Laporan via API
+                        </div>
+                        <div class="p-2 rounded-3 bg-light small">
+                            <i class="bi bi-info-circle text-info me-1"></i>
+                            Gunakan token JWT untuk setiap request ke backend
                         </div>
                     </div>
                 </div>
@@ -110,46 +122,42 @@ const routes = {
         </div>
     `,
 
-    // ---- Halaman 404 ----
+    // ---- 404 ----
     '#404': `
         <div class="text-center mt-5">
-            <i class="bi bi-exclamation-triangle-fill text-warning" style="font-size: 4rem;"></i>
-            <h3 class="mt-3">Halaman Tidak Ditemukan</h3>
-            <a href="#login" class="btn btn-primary mt-2">Kembali ke Login</a>
+            <i class="bi bi-exclamation-triangle-fill text-warning" style="font-size:4rem;"></i>
+            <h3 class="mt-3 fw-bold">Halaman Tidak Ditemukan</h3>
+            <p class="text-muted">Route yang kamu akses tidak tersedia.</p>
+            <a href="#login" class="btn btn-primary mt-2">
+                <i class="bi bi-arrow-left me-1"></i>Kembali ke Login
+            </a>
         </div>
     `,
 };
 
 // ============================================================
-// Fungsi utama: handle perpindahan halaman berdasarkan hash
+// Handle routing
 // ============================================================
 function handleRouting() {
     const hash = window.location.hash || '#login';
 
-    // Guard: redirect ke login jika belum login dan akses dashboard
     if (hash === '#dashboard' && !isLoggedIn()) {
         window.location.hash = '#login';
         return;
     }
 
-    // Render konten sesuai route, fallback ke 404
     const content = routes[hash] || routes['#404'];
     document.getElementById('app-content').innerHTML = content;
 
-    // Update navbar setiap pindah halaman
     renderNavbar();
 
-    // Inisialisasi form login jika hash = #login
     if (hash === '#login' && typeof setupLoginForm === 'function') {
         setupLoginForm();
     }
 }
 
-// ============================================================
-// Event Listeners
-// ============================================================
 window.addEventListener('hashchange', handleRouting);
 window.addEventListener('DOMContentLoaded', function () {
-    initApp();       // Inisialisasi app (navbar, dll)
-    handleRouting(); // Render halaman pertama
+    initApp();
+    handleRouting();
 });

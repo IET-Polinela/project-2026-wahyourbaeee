@@ -3,31 +3,29 @@
 // ============================================================
 
 /**
- * renderNavbar - Update navbar sesuai status login
+ * renderNavbar - Update bagian kanan navbar sesuai status login
  */
 function renderNavbar() {
     const navMenus = document.getElementById('nav-menus');
     if (!navMenus) return;
 
     if (isLoggedIn()) {
+        const username = localStorage.getItem('username') || 'Warga';
+        const initial  = username.charAt(0).toUpperCase();
+
         navMenus.innerHTML = `
-            <ul class="navbar-nav flex-row gap-2 align-items-center">
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#dashboard">
-                        <i class="bi bi-speedometer2 me-1"></i>Dashboard
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <button class="btn btn-outline-light btn-sm" onclick="logout()">
-                        <i class="bi bi-box-arrow-right me-1"></i>Logout
-                    </button>
-                </li>
-            </ul>
+            <div class="user-chip">
+                <div class="user-avatar">${initial}</div>
+                ${username}
+            </div>
+            <button class="btn btn-sm btn-outline-secondary" onclick="logout()">
+                <i class="bi bi-box-arrow-right me-1"></i>Keluar
+            </button>
         `;
     } else {
         navMenus.innerHTML = `
-            <a href="#login" class="btn btn-outline-light btn-sm">
-                <i class="bi bi-box-arrow-in-right me-1"></i>Login
+            <a href="#login" class="btn btn-sm btn-primary">
+                <i class="bi bi-lightning-charge me-1"></i>Masuk
             </a>
         `;
     }
