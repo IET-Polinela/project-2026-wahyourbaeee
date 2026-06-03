@@ -7,9 +7,9 @@ let editingReportId = null;
 let currentTab = 'my_reports';
 let currentPage = 1;
 
-/**
- * renderNavbar - Update bagian kanan navbar sesuai status login
- */
+// ============================================================
+// renderNavbar
+// ============================================================
 function renderNavbar() {
     const navMenus = document.getElementById('nav-menus');
     if (!navMenus) return;
@@ -37,34 +37,24 @@ function renderNavbar() {
 }
 
 // ============================================================
-// loadDashboardData 
+// loadDashboardData - Ambil data dari API lalu render
 // ============================================================
 async function loadDashboardData(tab = currentTab, page = currentPage) {
     currentTab = tab;
     currentPage = page;
 
-    // Menembak API Backend dengan parameter tab dan halaman
     const response = await requestAPI(`/api/report/?tab=${tab}&page=${page}`, 'GET');
 
     if (response && response.status === 200) {
-        // ── INSTRUKSI 1: Ekstraksi Data Paginasi (Destructuring) ──
-        // 1. Simpan array data laporan dari `response.data.results` ke variabel
-        //    global `allReports`. Jika kosong/undefined, set sebagai array kosong [].
-        // 2. Ambil total jumlah data keseluruhan dari `response.data.count` (set default 0).
-        // 3. Hitung variabel `totalPages` dengan membagi total data dengan 10,
-        //    lalu bulatkan ke atas menggunakan fungsi Math.ceil().
-
         const data = await response.json();
-        allReports = data.results ?? [];
-        const totalCount = data.count ?? 0;
-        const totalPages = Math.ceil(totalCount / 10);
 
-        // ── INSTRUKSI 2: Pemicu Pembaruan UI (Sinkronisasi Antarmuka) ──
-        // Panggil 2 fungsi ini secara berurutan agar layar langsung diperbarui:
-        // 1. renderList() -> menggambar susunan kartu laporan
-        // 2. renderPagination() -> menggambar ulang tombol halaman di bawah
+        // Ekstraksi data paginasi
+        const reports     = data.results ?? [];
+        const totalCount  = data.count ?? 0;
+        const totalPages  = Math.ceil(totalCount / 10);
 
-        renderList(allReports, tab);
+        // Update UI
+        renderList(reports, tab);
         renderPagination(totalPages);
         loadSummaryStats();
 
@@ -116,17 +106,10 @@ function renderList(reports, tab) {
             <div class="card border-0 shadow-sm rounded-4 p-3">
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <div>
-                        <span class="badge rounded-pill" 
-                            style="background:${statusConfig.color}">
-                            ${statusConfig.label}
-                        </span>
-                        <span class="badge bg-light text-muted border ms-1">
-                            ${report.category}
-                        </span>
+                        <span class="badge rounded-pill" style="background:${statusConfig.color}">${statusConfig.label}</span>
+                        <span class="badge bg-light text-muted border ms-1">${report.category}</span>
                     </div>
-                    <small class="text-muted">
-                        ${new Date(report.updated_at).toLocaleDateString('id-ID')}
-                    </small>
+                    <small class="text-muted">${new Date(report.updated_at).toLocaleDateString('id-ID')}</small>
                 </div>
 
                 <h6 class="fw-bold mb-1">${report.title}</h6>
@@ -143,13 +126,10 @@ function renderList(reports, tab) {
                     <div class="progress" style="height:6px;">
                         <div class="progress-bar" role="progressbar"
                             style="width:${statusConfig.progress}%; background:${statusConfig.color};"
-                            aria-valuenow="${statusConfig.progress}" 
-                            aria-valuemin="0" aria-valuemax="100">
+                            aria-valuenow="${statusConfig.progress}" aria-valuemin="0" aria-valuemax="100">
                         </div>
                     </div>
-                    <small class="text-muted">
-                        ${statusConfig.label} · ${statusConfig.progress}%
-                    </small>
+                    <small class="text-muted">${statusConfig.label} · ${statusConfig.progress}%</small>
                 </div>
 
                 <div class="d-flex gap-2 mt-1">
@@ -189,23 +169,23 @@ function renderPagination(totalPages) {
 
     let html = '<nav><ul class="pagination pagination-sm justify-content-center mb-0">';
 
+    // Tombol Prev
     html += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-        <button class="page-link" 
-            onclick="loadDashboardData('${currentTab}', ${currentPage - 1})">
+        <button class="page-link" onclick="loadDashboardData('${currentTab}', ${currentPage - 1})">
             <i class="bi bi-chevron-left"></i>
         </button>
     </li>`;
 
+    // Nomor halaman
     for (let i = 1; i <= totalPages; i++) {
         html += `<li class="page-item ${i === currentPage ? 'active' : ''}">
-            <button class="page-link" 
-                onclick="loadDashboardData('${currentTab}', ${i})">${i}</button>
+            <button class="page-link" onclick="loadDashboardData('${currentTab}', ${i})">${i}</button>
         </li>`;
     }
 
+    // Tombol Next
     html += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-        <button class="page-link" 
-            onclick="loadDashboardData('${currentTab}', ${currentPage + 1})">
+        <button class="page-link" onclick="loadDashboardData('${currentTab}', ${currentPage + 1})">
             <i class="bi bi-chevron-right"></i>
         </button>
     </li>`;
@@ -215,22 +195,18 @@ function renderPagination(totalPages) {
 }
 
 // ============================================================
-// loadSummaryStats - Bypass pagination untuk rekap sidebar
+// loadSummaryStats - Rekap status di sidebar
 // ============================================================
 async function loadSummaryStats() {
-    const response = await requestAPI(
-        '/api/report/?tab=my_reports&page_size=1000', 'GET'
-    );
+    const response = await requestAPI('/api/report/?tab=my_reports&page_size=1000', 'GET');
     if (!response || response.status !== 200) return;
 
     const data = await response.json();
     const all  = data.results ?? [];
 
-    const draft    = all.filter(r => r.status === 'DRAFT').length;
-    const diproses = all.filter(r => 
-        ['REPORTED','VERIFIED','IN_PROGRESS'].includes(r.status)
-    ).length;
-    const selesai  = all.filter(r => r.status === 'RESOLVED').length;
+    const draft     = all.filter(r => r.status === 'DRAFT').length;
+    const diproses  = all.filter(r => ['REPORTED','VERIFIED','IN_PROGRESS'].includes(r.status)).length;
+    const selesai   = all.filter(r => r.status === 'RESOLVED').length;
 
     const elDraft    = document.getElementById('statDraft');
     const elDiproses = document.getElementById('statDiproses');
@@ -267,20 +243,20 @@ async function editDraft(id) {
         '<i class="bi bi-pencil-square me-2"></i>Edit Draft Laporan';
 
     // Tampilkan modal
-    setupModalButtons();
     const modal = new bootstrap.Modal(document.getElementById('reportModal'));
     modal.show();
 }
 
 // ============================================================
-// setupModalButtons - Tombol Simpan Draft & Ajukan
+// setupModalButtons - Setup tombol Simpan Draft & Ajukan
 // ============================================================
 function setupModalButtons() {
     const btnDraft  = document.getElementById('btnDraft');
     const btnSubmit = document.getElementById('btnSubmit');
+
     if (!btnDraft || !btnSubmit) return;
 
-    btnDraft.onclick  = () => submitReport('DRAFT');
+    btnDraft.onclick = () => submitReport('DRAFT');
     btnSubmit.onclick = () => submitReport('REPORTED');
 }
 
@@ -298,17 +274,13 @@ async function submitReport(status) {
     const bodyData = { title, category, description, location, status };
     const isEdit   = editingReportId !== null;
     const method   = isEdit ? 'PUT' : 'POST';
-    const endpoint = isEdit 
-        ? `/api/report/${editingReportId}/` 
-        : '/api/report/';
+    const endpoint = isEdit ? `/api/report/${editingReportId}/` : '/api/report/';
 
     const response = await requestAPI(endpoint, method, bodyData);
 
     if (response && (response.status === 201 || response.status === 200)) {
         // Tutup modal
-        bootstrap.Modal.getInstance(
-            document.getElementById('reportModal')
-        )?.hide();
+        bootstrap.Modal.getInstance(document.getElementById('reportModal'))?.hide();
 
         // Reset form & state
         document.getElementById('reportForm').reset();
@@ -316,12 +288,9 @@ async function submitReport(status) {
         document.getElementById('reportModalLabel').innerHTML =
             '<i class="bi bi-pencil-square me-2"></i>Buat Laporan Baru';
 
-        showToast(
-            isEdit ? 'Laporan berhasil diperbarui!' : 'Laporan berhasil dibuat!', 
-            'success'
-        );
+        showToast(isEdit ? 'Laporan berhasil diperbarui!' : 'Laporan berhasil dibuat!', 'success');
 
-        // Refresh data tanpa reload halaman
+        // Refresh data tanpa reload
         loadDashboardData(currentTab, currentPage);
 
     } else {
@@ -331,9 +300,8 @@ async function submitReport(status) {
 }
 
 // ============================================================
-// initApp
+// initApp - Inisialisasi pertama saat halaman dimuat
 // ============================================================
 function initApp() {
     renderNavbar();
-}
 }

@@ -17,7 +17,6 @@ const routes = {
                         <h5 class="fw-bold mb-0">Login Warga</h5>
                         <p class="text-muted small mt-1">Smart City Portal · PIE 1416</p>
                     </div>
-
                     <form id="loginForm">
                         <div class="mb-3">
                             <label class="form-label fw-semibold small" for="loginUsername">Username</label>
@@ -50,50 +49,86 @@ const routes = {
         </div>
     `,
 
-    // ---- Halaman Dashboard (3-kolom responsive) ----
+    // ---- Halaman Dashboard ----
     '#dashboard': `
         <div class="row g-4">
 
-            <!-- Kolom Kiri (25%) - Sidebar Aksi -->
+            <!-- Kolom Kiri (25%) - Sidebar -->
             <aside class="col-12 col-lg-3">
                 <div class="card border-0 shadow-sm rounded-4 p-3 sticky-top" style="top:80px;">
-                    <h6 class="fw-bold mb-3 text-muted small text-uppercase ls-1">
-                        <i class="bi bi-grid me-1"></i>Menu
-                    </h6>
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-primary btn-sm text-start rounded-3">
+
+                    <!-- Tombol Laporan Baru -->
+                    <div class="d-grid mb-3">
+                        <button class="btn btn-primary btn-sm text-start rounded-3"
+                            data-bs-toggle="modal" data-bs-target="#reportModal"
+                            onclick="setupModalButtons()">
                             <i class="bi bi-plus-circle-fill me-2"></i>Laporan Baru
                         </button>
-                        <button class="btn btn-light btn-sm text-start rounded-3 border">
-                            <i class="bi bi-list-ul me-2 text-muted"></i>Riwayat Laporan
-                        </button>
-                        <button class="btn btn-light btn-sm text-start rounded-3 border">
-                            <i class="bi bi-person me-2 text-muted"></i>Profil Saya
-                        </button>
-                        <hr class="my-1">
-                        <button class="btn btn-light btn-sm text-start rounded-3 border text-danger" onclick="logout()">
-                            <i class="bi bi-box-arrow-right me-2"></i>Keluar
-                        </button>
                     </div>
+
+                    <!-- Rekap Status -->
+                    <h6 class="fw-bold mb-2 text-muted small text-uppercase">
+                        <i class="bi bi-bar-chart me-1"></i>Rekap Laporan Saya
+                    </h6>
+                    <div class="d-flex flex-column gap-2 mb-3">
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded-3 bg-light">
+                            <span class="small">
+                                <i class="bi bi-file-earmark me-1 text-secondary"></i>Draft
+                            </span>
+                            <span class="badge bg-secondary" id="statDraft">0</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded-3 bg-light">
+                            <span class="small">
+                                <i class="bi bi-arrow-repeat me-1 text-primary"></i>Diproses
+                            </span>
+                            <span class="badge bg-primary" id="statDiproses">0</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded-3 bg-light">
+                            <span class="small">
+                                <i class="bi bi-check-circle me-1 text-success"></i>Selesai
+                            </span>
+                            <span class="badge bg-success" id="statSelesai">0</span>
+                        </div>
+                    </div>
+
+                    <hr class="my-1">
+                    <button class="btn btn-light btn-sm text-start rounded-3 border text-danger w-100"
+                        onclick="logout()">
+                        <i class="bi bi-box-arrow-right me-2"></i>Keluar
+                    </button>
                 </div>
             </aside>
 
             <!-- Kolom Tengah (50%) - Konten Utama -->
             <section class="col-12 col-lg-6">
-                <div class="card border-0 shadow-sm rounded-4 p-4 text-center">
-                    <div class="mx-auto mb-3 d-flex align-items-center justify-content-center rounded-3"
-                        style="width:56px;height:56px;background:#f1f5f9;">
-                        <i class="bi bi-inbox fs-3 text-muted"></i>
-                    </div>
-                    <h5 class="fw-bold">Selamat Datang!</h5>
-                    <p class="text-muted small">
-                        Koneksi API untuk data laporan akan diimplementasikan pada Lab 12.
-                    </p>
-                    <div class="alert alert-success d-flex align-items-center gap-2 text-start rounded-3 mt-2 mb-0">
-                        <i class="bi bi-check-circle-fill text-success"></i>
-                        <span class="small">Login berhasil. Token JWT tersimpan di localStorage.</span>
+
+                <!-- Tab navigasi -->
+                <ul class="nav nav-pills mb-3 gap-1" id="dashboardTabs">
+                    <li class="nav-item">
+                        <button class="nav-link active" id="tabMyReports"
+                            onclick="switchTab('my_reports')">
+                            <i class="bi bi-person-lines-fill me-1"></i>Laporan Saya
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="tabFeed"
+                            onclick="switchTab('feed')">
+                            <i class="bi bi-globe2 me-1"></i>Feed Kota
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Container kartu laporan -->
+                <div class="row g-3" id="listContainer">
+                    <div class="col-12 text-center text-muted p-5">
+                        <div class="spinner-border spinner-border-sm me-2"></div>
+                        Memuat data...
                     </div>
                 </div>
+
+                <!-- Container pagination -->
+                <div class="mt-3" id="paginationContainer"></div>
+
             </section>
 
             <!-- Kolom Kanan (25%) - Pengumuman -->
@@ -146,6 +181,7 @@ function handleRouting() {
         return;
     }
 
+    // Render HTML 
     const content = routes[hash] || routes['#404'];
     document.getElementById('app-content').innerHTML = content;
 
@@ -154,6 +190,20 @@ function handleRouting() {
     if (hash === '#login' && typeof setupLoginForm === 'function') {
         setupLoginForm();
     }
+
+    // Baru panggil loadDashboardData setelah HTML ada di DOM
+    if (hash === '#dashboard' && typeof loadDashboardData === 'function') {
+        loadDashboardData('my_reports', 1);
+    }
+}
+
+// ============================================================
+// switchTab - Ganti tab aktif
+// ============================================================
+function switchTab(tab) {
+    document.getElementById('tabMyReports')?.classList.toggle('active', tab === 'my_reports');
+    document.getElementById('tabFeed')?.classList.toggle('active', tab === 'feed');
+    loadDashboardData(tab, 1);
 }
 
 window.addEventListener('hashchange', handleRouting);
