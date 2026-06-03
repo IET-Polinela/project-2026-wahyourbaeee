@@ -17,14 +17,18 @@ class ReportViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_authenticated and user.is_admin:
-            # Admin hanya lihat laporan yang BUKAN DRAFT
-            return Report.objects.exclude(status='DRAFT')
-        elif user.is_authenticated:
-            # Citizen lihat semua laporan milik sendiri + laporan non-DRAFT milik orang lain
-            return Report.objects.exclude(status='DRAFT') | Report.objects.filter(reporter=user)
-        # Guest hanya lihat non-DRAFT
-        return Report.objects.exclude(status='DRAFT')
+        queryset = Report.objects.all().order_by('-updated_at')
+        tab = self.request.query_params.get('tab', None)
+
+        if tab == 'my_reports':
+            queryset = queryset.filter(reporter=user)
+        elif tab == 'feed':
+            queryset = queryset.filter(~Q(reporter=user) & ~Q(status='DRAFT'))
+        else:
+            queryset = queryset.filter(
+                ~Q(status='DRAFT') | Q(status='DRAFT', reporter=user)
+            )
+        return queryset
     
     def get_serializer_class(self):  
         user = self.request.user
