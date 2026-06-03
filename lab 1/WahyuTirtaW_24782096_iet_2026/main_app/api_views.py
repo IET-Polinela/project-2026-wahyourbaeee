@@ -47,6 +47,4 @@ class ReportViewSet(viewsets.ModelViewSet):
         serializer.save(reporter=self.request.user)
 
 
-# untuk commit lab 11
-
     
