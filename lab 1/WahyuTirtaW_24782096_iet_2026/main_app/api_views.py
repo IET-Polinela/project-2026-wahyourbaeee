@@ -1,9 +1,19 @@
 from rest_framework import viewsets, permissions
+from rest_framework.pagination import PageNumberPagination
 from .models import Report
 from .serializers import ReportSerializer, ReportStatusSerializer
 from .permissions import IsOwnerAndDraftOrReadOnly, IsAdminUpdateStatusOnly
+from django.db.models import Q
+
+class ReportPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 class ReportViewSet(viewsets.ModelViewSet):
+    # deklarasi pagationdalam viewset
+    serializer_class = ReportSerializer
+    pagination_class = ReportPagination
 
     def get_queryset(self):
         user = self.request.user
