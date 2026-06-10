@@ -59,7 +59,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'WahyuTirtaW_24782096_iet_2026.urls'
+ROOT_URLCONF = 'smartcity_app.urls'
 
 TEMPLATES = [
     {
@@ -76,7 +76,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'WahyuTirtaW_24782096_iet_2026.wsgi.application'
+WSGI_APPLICATION = 'smartcity_app.wsgi.application'
 
 
 # Database

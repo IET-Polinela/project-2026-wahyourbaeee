@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'WahyuTirtaW_24782096_iet_2026.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'smarcity_app.settings')
 
 application = get_wsgi_application()
