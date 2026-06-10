@@ -189,8 +189,15 @@
 <!-- Hero -->
 <div class="contact-hero">
   <div class="contact-hero-content">
-    <div class="page-tag"><i class="bi bi-envelope"></i> Hubungi Kami</div>
-    <h1>Ada Pertanyaan atau<br /><span>Kendala Teknis?</span></h1>
+    <div class="page-tag">
+      <i class="bi bi-envelope"></i>
+      Hubungi Kami
+    </div>
+    <h1>
+      Ada Pertanyaan atau
+      <br />
+      <span>Kendala Teknis?</span>
+    </h1>
     <p>
       Tim TheoTown T-MAP siap membantu. Kirim pesan melalui form atau hubungi
       kami langsung melalui saluran di bawah.
@@ -209,7 +216,7 @@
         </div>
         <div>
           <div class="channel-label">Email</div>
-          <div class="channel-value">wahyu@theotown.id</div>
+          <div class="channel-value">24782096@student.polinela.ac.id</div>
         </div>
       </div>
       <div class="channel-card">
@@ -248,9 +255,9 @@
     >
       <div class="d-flex align-items-center gap-2 mb-1">
         <i class="bi bi-clock" style="color: #3b82f6"></i>
-        <span class="fw-semibold small" style="color: #1d4ed8"
-          >Waktu Respon</span
-        >
+        <span class="fw-semibold small" style="color: #1d4ed8">
+          Waktu Respon
+        </span>
       </div>
       <p class="small mb-0" style="color: #3b82f6">
         Kami biasanya merespons dalam 1×24 jam di hari kerja.
@@ -261,15 +268,18 @@
   <!-- Right: form -->
   <div class="col-lg-8">
     <div class="form-card">
-      <h5><i class="bi bi-send me-2" style="color: #3b82f6"></i>Kirim Pesan</h5>
+      <h5>
+        <i class="bi bi-send me-2" style="color: #3b82f6"></i>
+        Kirim Pesan
+      </h5>
 
       <!-- Success box (shown via JS after submit) -->
       <div class="success-box" id="successBox">
         <i class="bi bi-check-circle-fill fs-5"></i>
-        <span
-          >Pesan berhasil dikirim! Terima kasih, kami akan segera menghubungi
-          kamu.</span
-        >
+        <span>
+          Pesan berhasil dikirim! Terima kasih, kami akan segera menghubungi
+          kamu.
+        </span>
       </div>
 
       <form method="post" id="contactForm">
@@ -277,9 +287,10 @@
 
         <div class="row g-3 mb-3">
           <div class="col-sm-6">
-            <label class="form-label"
-              >Nama Lengkap <span class="text-danger">*</span></label
-            >
+            <label class="form-label">
+              Nama Lengkap
+              <span class="text-danger">*</span>
+            </label>
             <div class="input-group">
               <span class="input-group-text"><i class="bi bi-person"></i></span>
               <input
@@ -292,13 +303,14 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <label class="form-label"
-              >Email <span class="text-danger">*</span></label
-            >
+            <label class="form-label">
+              Email
+              <span class="text-danger">*</span>
+            </label>
             <div class="input-group">
-              <span class="input-group-text"
-                ><i class="bi bi-envelope"></i
-              ></span>
+              <span class="input-group-text">
+                <i class="bi bi-envelope"></i>
+              </span>
               <input
                 type="email"
                 name="email"
@@ -311,9 +323,10 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label"
-            >Subjek <span class="text-danger">*</span></label
-          >
+          <label class="form-label">
+            Subjek
+            <span class="text-danger">*</span>
+          </label>
           <select name="subject" class="form-select" required>
             <option value="" disabled selected>Pilih topik pesan</option>
             <option value="bug">🐛 Laporan Bug / Error</option>
@@ -325,9 +338,10 @@
         </div>
 
         <div class="mb-4">
-          <label class="form-label"
-            >Pesan <span class="text-danger">*</span></label
-          >
+          <label class="form-label">
+            Pesan
+            <span class="text-danger">*</span>
+          </label>
           <textarea
             name="message"
             class="form-control"
@@ -340,10 +354,12 @@
 
         <div class="d-flex gap-2 flex-wrap">
           <button type="submit" class="btn btn-primary px-4">
-            <i class="bi bi-send me-1"></i> Kirim Pesan
+            <i class="bi bi-send me-1"></i>
+            Kirim Pesan
           </button>
           <a href="{% url 'home' %}" class="btn btn-outline-secondary">
-            <i class="bi bi-house me-1"></i> Kembali ke Beranda
+            <i class="bi bi-house me-1"></i>
+            Kembali ke Beranda
           </a>
         </div>
       </form>
