@@ -16,137 +16,487 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Fredoka:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
     <style>
       :root {
-        --primary: #1d4ed8;
-        --primary-light: #3b82f6;
-        --accent: #06b6d4;
-        --success: #10b981;
-        --warning: #f59e0b;
-        --danger: #ef4444;
-        --bg: #f1f5f9;
-        --surface: #ffffff;
-        --border: #e2e8f0;
-        --text: #0f172a;
-        --muted: #64748b;
+        --c1: #e3fdfd; /* lightest */
+        --c2: #cbf1f5;
+        --c3: #a6e3e9;
+        --c4: #71c9ce; /* darkest accent */
+        --white: #ffffff;
+        --text: #1a4a4e;
+        --muted: #5a8f94;
+        --border: #c2eaed;
+        --shadow: rgba(113, 201, 206, 0.25);
         --nav-h: 64px;
       }
 
       * {
         box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
 
       body {
-        font-family: "Plus Jakarta Sans", sans-serif;
-        background-color: var(--bg);
+        font-family: "Nunito", sans-serif;
+        background: var(--c1);
         color: var(--text);
-        margin: 0;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* ── Floating clouds background ── */
+      .cloud-bg {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .cloud {
+        position: absolute;
+        opacity: 0.55;
+      }
+
+      .cloud-1 {
+        top: 8%;
+        left: -120px;
+        animation: cloudDrift 22s linear infinite;
+      }
+      .cloud-2 {
+        top: 20%;
+        left: -200px;
+        animation: cloudDrift 30s linear infinite 8s;
+      }
+      .cloud-3 {
+        top: 55%;
+        left: -180px;
+        animation: cloudDrift 26s linear infinite 14s;
+      }
+      .cloud-4 {
+        top: 75%;
+        left: -150px;
+        animation: cloudDrift 34s linear infinite 4s;
+      }
+
+      @keyframes cloudDrift {
+        from {
+          transform: translateX(-250px);
+        }
+        to {
+          transform: translateX(110vw);
+        }
       }
 
       /* ── Navbar ── */
       .t-navbar {
-        height: auto;
-        min-height: var(--nav-h);
-        background: var(--surface);
-        border-bottom: 1px solid var(--border);
-        box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
         position: sticky;
         top: 0;
         z-index: 1000;
-      }
-
-      .t-navbar .navbar-collapse.show {
-        padding-bottom: 12px;
+        height: var(--nav-h);
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(16px);
+        border-bottom: 2px solid var(--c2);
+        box-shadow: 0 2px 20px var(--shadow);
       }
 
       .navbar-brand {
-        font-family: "Sora", sans-serif;
+        font-family: "Fredoka", sans-serif;
         font-weight: 700;
-        font-size: 1.1rem;
+        font-size: 1.15rem;
         color: var(--text) !important;
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.55rem;
         text-decoration: none;
       }
 
       .brand-logo {
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
-        background: linear-gradient(135deg, var(--primary), var(--accent));
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--c4), var(--c3));
         display: flex;
         align-items: center;
         justify-content: center;
         color: #fff;
-        font-size: 1rem;
-        box-shadow: 0 2px 8px rgba(29, 78, 216, 0.3);
-        flex-shrink: 0;
+        font-size: 1.1rem;
+        box-shadow: 0 4px 14px var(--shadow);
+        animation: logoBounce 3s ease-in-out infinite;
+      }
+
+      @keyframes logoBounce {
+        0%,
+        100% {
+          transform: translateY(0) rotate(-2deg);
+        }
+        50% {
+          transform: translateY(-4px) rotate(2deg);
+        }
       }
 
       .brand-tag {
-        font-size: 0.58rem;
-        font-weight: 700;
-        background: #eff6ff;
-        color: var(--primary);
-        border: 1px solid #bfdbfe;
-        padding: 1px 7px;
+        font-size: 0.55rem;
+        font-weight: 800;
+        background: var(--c3);
+        color: var(--text);
+        padding: 2px 8px;
         border-radius: 20px;
         letter-spacing: 0.1em;
       }
 
       .nav-link {
         color: var(--muted) !important;
-        font-weight: 500;
+        font-weight: 700;
         font-size: 0.875rem;
-        border-radius: 8px;
-        padding: 0.4rem 0.85rem !important;
+        border-radius: 10px;
+        padding: 0.4rem 0.9rem !important;
         transition: all 0.2s;
         display: flex;
         align-items: center;
-        gap: 0.3rem;
+        gap: 0.35rem;
       }
 
-      .nav-link:hover,
+      .nav-link:hover {
+        color: var(--text) !important;
+        background: var(--c2);
+      }
       .nav-link.active {
-        color: var(--primary) !important;
-        background: #eff6ff;
+        color: var(--text) !important;
+        background: var(--c3);
+        font-weight: 800;
       }
 
-      .nav-link.active {
-        font-weight: 600;
-      }
-
-      /* User chip */
       .user-chip {
         display: inline-flex;
         align-items: center;
         gap: 0.45rem;
-        background: #f8fafc;
-        border: 1px solid var(--border);
+        background: var(--c2);
+        border: 2px solid var(--c3);
         border-radius: 30px;
-        padding: 0.28rem 0.75rem 0.28rem 0.35rem;
+        padding: 0.28rem 0.85rem 0.28rem 0.35rem;
         font-size: 0.82rem;
-        font-weight: 600;
-        color: #334155;
+        font-weight: 700;
+        color: var(--text);
       }
 
       .user-avatar {
         width: 28px;
         height: 28px;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--primary), var(--accent));
+        background: linear-gradient(135deg, var(--c4), var(--c3));
         color: #fff;
         font-size: 0.7rem;
-        font-weight: 700;
+        font-weight: 800;
         display: flex;
         align-items: center;
         justify-content: center;
-        flex-shrink: 0;
+        box-shadow: 0 2px 8px var(--shadow);
+      }
+
+      /* ── Buttons ── */
+      .btn {
+        font-family: "Nunito", sans-serif;
+        font-weight: 800;
+        border-radius: 12px;
+        transition: all 0.2s;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--c4), var(--c3));
+        border: none;
+        color: var(--text);
+        box-shadow: 0 4px 16px var(--shadow);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 8px 24px var(--shadow);
+        color: var(--text);
+        filter: brightness(1.05);
+      }
+
+      .btn-primary:active {
+        transform: translateY(0) scale(0.98);
+      }
+
+      .btn-outline-secondary {
+        color: var(--muted);
+        border: 2px solid var(--border);
+        background: var(--white);
+      }
+
+      .btn-outline-secondary:hover {
+        background: var(--c2);
+        color: var(--text);
+        border-color: var(--c3);
+      }
+
+      /* ── Cards ── */
+      .fun-card {
+        background: var(--white);
+        border: 2px solid var(--border);
+        border-radius: 20px;
+        box-shadow: 0 4px 20px var(--shadow);
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .fun-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--c3), var(--c4), var(--c3));
+        background-size: 200% 100%;
+        animation: gradientSlide 3s linear infinite;
+      }
+
+      @keyframes gradientSlide {
+        0% {
+          background-position: 0% 0;
+        }
+        100% {
+          background-position: 200% 0;
+        }
+      }
+
+      .fun-card:hover {
+        transform: translateY(-4px) scale(1.01);
+        box-shadow: 0 12px 36px var(--shadow);
+        border-color: var(--c3);
+      }
+
+      /* Report card animate in */
+      .report-card {
+        animation: cardPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+
+      @keyframes cardPop {
+        from {
+          opacity: 0;
+          transform: translateY(20px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .report-card:nth-child(1) {
+        animation-delay: 0.05s;
+      }
+      .report-card:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .report-card:nth-child(3) {
+        animation-delay: 0.15s;
+      }
+      .report-card:nth-child(4) {
+        animation-delay: 0.2s;
+      }
+      .report-card:nth-child(5) {
+        animation-delay: 0.25s;
+      }
+
+      /* ── Progress bar ── */
+      .prog-track {
+        height: 8px;
+        background: var(--c1);
+        border-radius: 99px;
+        overflow: hidden;
+        border: 1px solid var(--c2);
+      }
+
+      .prog-fill {
+        height: 100%;
+        border-radius: 99px;
+        transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        background: linear-gradient(90deg, var(--c3), var(--c4));
+        position: relative;
+        overflow: hidden;
+      }
+
+      .prog-fill::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 60%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.6),
+          transparent
+        );
+        animation: progShine 2s infinite;
+      }
+
+      @keyframes progShine {
+        to {
+          left: 200%;
+        }
+      }
+
+      /* ── Status badges ── */
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.72rem;
+        font-weight: 800;
+        padding: 4px 12px;
+        border-radius: 99px;
+        letter-spacing: 0.02em;
+      }
+
+      /* ── Tab pills ── */
+      .tab-pill {
+        display: flex;
+        gap: 4px;
+        background: var(--c1);
+        border: 2px solid var(--border);
+        border-radius: 14px;
+        padding: 4px;
+        width: fit-content;
+        margin-bottom: 1.25rem;
+      }
+
+      .tab-pill .nav-link {
+        border-radius: 10px !important;
+        padding: 0.45rem 1.1rem !important;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--muted) !important;
+        background: transparent;
+      }
+
+      .tab-pill .nav-link.active {
+        background: linear-gradient(135deg, var(--c4), var(--c3)) !important;
+        color: var(--text) !important;
+        box-shadow: 0 3px 12px var(--shadow);
+      }
+
+      /* ── Stat box ── */
+      .stat-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: var(--c1);
+        border: 2px solid var(--border);
+        transition: all 0.2s;
+      }
+
+      .stat-box:hover {
+        border-color: var(--c3);
+        background: var(--c2);
+        transform: translateX(3px);
+      }
+
+      .stat-num {
+        font-family: "Fredoka", sans-serif;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--c4);
+        min-width: 28px;
+        text-align: right;
+      }
+
+      /* ── Skeleton ── */
+      .skeleton {
+        background: linear-gradient(
+          90deg,
+          var(--c1) 25%,
+          var(--c2) 50%,
+          var(--c1) 75%
+        );
+        background-size: 200% 100%;
+        animation: skeletonPulse 1.5s infinite;
+        border-radius: 10px;
+      }
+
+      @keyframes skeletonPulse {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+
+      /* ── Modal ── */
+      .modal-content {
+        background: var(--white);
+        border: 2px solid var(--c3);
+        border-radius: 24px;
+        box-shadow: 0 24px 60px var(--shadow);
+        overflow: hidden;
+      }
+
+      .modal-header {
+        border-bottom: 2px solid var(--c2);
+        padding: 1.25rem 1.5rem;
+        background: linear-gradient(135deg, var(--c1), var(--c2));
+      }
+
+      .modal-title {
+        color: var(--text);
+        font-weight: 800;
+        font-size: 1rem;
+        font-family: "Fredoka", sans-serif;
+      }
+
+      .modal-body {
+        padding: 1.5rem;
+        background: var(--white);
+      }
+
+      .modal-footer {
+        border-top: 2px solid var(--c2);
+        padding: 1rem 1.5rem;
+        background: var(--c1);
+      }
+
+      .form-control,
+      .form-select {
+        background: var(--c1);
+        border: 2px solid var(--border);
+        color: var(--text);
+        border-radius: 12px;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.875rem;
+        font-weight: 600;
+        transition: all 0.2s;
+      }
+
+      .form-control:focus,
+      .form-select:focus {
+        background: var(--white);
+        border-color: var(--c4);
+        box-shadow: 0 0 0 4px rgba(113, 201, 206, 0.2);
+        color: var(--text);
+      }
+
+      .form-control::placeholder {
+        color: var(--muted);
+      }
+      .form-label {
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
       }
 
       /* ── Toast ── */
@@ -167,24 +517,25 @@
         align-items: flex-start;
         gap: 0.7rem;
         padding: 0.85rem 1rem;
-        border-radius: 12px;
-        background: var(--surface);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        border-left: 3px solid transparent;
-        animation: toastIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        border-radius: 16px;
+        background: var(--white);
+        box-shadow: 0 8px 32px var(--shadow);
+        border: 2px solid var(--border);
+        border-left: 4px solid transparent;
+        animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
       }
 
       .t-toast.success {
-        border-color: var(--success);
+        border-left-color: #10b981;
       }
       .t-toast.danger {
-        border-color: var(--danger);
+        border-left-color: #ef4444;
       }
       .t-toast.warning {
-        border-color: var(--warning);
+        border-left-color: #f59e0b;
       }
       .t-toast.info {
-        border-color: var(--accent);
+        border-left-color: var(--c4);
       }
 
       .t-toast__icon {
@@ -193,54 +544,57 @@
         margin-top: 1px;
       }
       .t-toast.success .t-toast__icon {
-        color: var(--success);
+        color: #10b981;
       }
       .t-toast.danger .t-toast__icon {
-        color: var(--danger);
+        color: #ef4444;
       }
       .t-toast.warning .t-toast__icon {
-        color: var(--warning);
+        color: #f59e0b;
       }
       .t-toast.info .t-toast__icon {
-        color: var(--accent);
+        color: var(--c4);
       }
 
       .t-toast__body {
         flex: 1;
         font-size: 0.85rem;
-        color: #334155;
+        color: var(--text);
         line-height: 1.5;
+        font-weight: 600;
       }
       .t-toast__close {
         background: none;
         border: none;
-        color: #94a3b8;
+        color: var(--muted);
         cursor: pointer;
         font-size: 0.85rem;
         padding: 0;
         transition: color 0.2s;
       }
       .t-toast__close:hover {
-        color: #475569;
+        color: var(--text);
       }
 
       @keyframes toastIn {
         from {
           opacity: 0;
-          transform: translateX(20px);
+          transform: translateX(24px) scale(0.9);
         }
         to {
           opacity: 1;
-          transform: translateX(0);
+          transform: translateX(0) scale(1);
         }
       }
+
       .t-toast.hiding {
         animation: toastOut 0.2s ease forwards;
       }
+
       @keyframes toastOut {
         to {
           opacity: 0;
-          transform: translateX(20px);
+          transform: translateX(24px);
           max-height: 0;
           padding: 0;
           margin: 0;
@@ -248,49 +602,141 @@
         }
       }
 
-      /* ── Page ── */
+      /* ── Page & Footer ── */
       .page-wrap {
+        position: relative;
+        z-index: 1;
         min-height: calc(100vh - var(--nav-h) - 54px);
         padding: 2rem 0 3.5rem;
       }
 
-      /* ── Footer ── */
       .site-footer {
-        background: var(--surface);
-        border-top: 1px solid var(--border);
+        position: relative;
+        z-index: 1;
+        background: var(--white);
+        border-top: 2px solid var(--c2);
         padding: 1rem 0;
         font-size: 0.76rem;
         color: var(--muted);
+        font-weight: 700;
       }
 
       .online-dot {
-        width: 7px;
-        height: 7px;
+        width: 8px;
+        height: 8px;
         border-radius: 50%;
-        background: var(--success);
+        background: #10b981;
         display: inline-block;
         margin-right: 5px;
-        box-shadow: 0 0 6px var(--success);
-        animation: pulse 2s infinite;
+        box-shadow: 0 0 8px #10b981;
+        animation: onlinePulse 2s infinite;
       }
 
-      @keyframes pulse {
+      @keyframes onlinePulse {
         0%,
         100% {
-          opacity: 1;
+          box-shadow: 0 0 8px #10b981;
         }
         50% {
-          opacity: 0.35;
+          box-shadow: 0 0 18px #10b981;
         }
       }
 
-      .btn {
-        font-family: "Plus Jakarta Sans", sans-serif;
-        font-weight: 600;
+      /* ── Pagination ── */
+      .page-link {
+        background: var(--white);
+        border: 2px solid var(--border);
+        color: var(--muted);
+        border-radius: 10px !important;
+        margin: 0 2px;
+        font-size: 0.82rem;
+        font-weight: 800;
+        transition: all 0.2s;
+      }
+
+      .page-item.active .page-link {
+        background: linear-gradient(135deg, var(--c4), var(--c3));
+        border-color: transparent;
+        box-shadow: 0 3px 12px var(--shadow);
+        color: var(--text);
+      }
+
+      .page-link:hover {
+        background: var(--c2);
+        color: var(--text);
+        border-color: var(--c3);
+        transform: translateY(-1px);
+      }
+
+      /* ── Wobble anim for icons ── */
+      .wobble {
+        animation: wobble 3s ease-in-out infinite;
+      }
+      @keyframes wobble {
+        0%,
+        100% {
+          transform: rotate(-5deg);
+        }
+        50% {
+          transform: rotate(5deg);
+        }
+      }
+
+      .float {
+        animation: float 4s ease-in-out infinite;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .float2 {
+        animation: float 4s ease-in-out infinite 1s;
+      }
+      .float3 {
+        animation: float 4s ease-in-out infinite 2s;
       }
     </style>
   </head>
   <body>
+    <!-- ══════ CLOUD BACKGROUND ══════ -->
+    <div class="cloud-bg">
+      <!-- Cloud SVGs -->
+      <svg class="cloud cloud-1" width="200" height="80" viewBox="0 0 200 80">
+        <ellipse cx="100" cy="55" rx="90" ry="28" fill="#cbf1f5" />
+        <ellipse cx="70" cy="45" rx="45" ry="35" fill="#cbf1f5" />
+        <ellipse cx="120" cy="40" rx="50" ry="38" fill="#cbf1f5" />
+        <ellipse cx="155" cy="52" rx="35" ry="25" fill="#cbf1f5" />
+      </svg>
+      <svg class="cloud cloud-2" width="160" height="65" viewBox="0 0 160 65">
+        <ellipse cx="80" cy="45" rx="72" ry="22" fill="#a6e3e9" opacity="0.7" />
+        <ellipse cx="55" cy="36" rx="36" ry="28" fill="#a6e3e9" opacity="0.7" />
+        <ellipse
+          cx="100"
+          cy="32"
+          rx="40"
+          ry="30"
+          fill="#a6e3e9"
+          opacity="0.7"
+        />
+      </svg>
+      <svg class="cloud cloud-3" width="180" height="72" viewBox="0 0 180 72">
+        <ellipse cx="90" cy="50" rx="80" ry="25" fill="#cbf1f5" />
+        <ellipse cx="65" cy="40" rx="40" ry="32" fill="#cbf1f5" />
+        <ellipse cx="115" cy="36" rx="44" ry="34" fill="#cbf1f5" />
+      </svg>
+      <svg class="cloud cloud-4" width="140" height="58" viewBox="0 0 140 58">
+        <ellipse cx="70" cy="40" rx="62" ry="20" fill="#a6e3e9" opacity="0.5" />
+        <ellipse cx="50" cy="32" rx="32" ry="25" fill="#a6e3e9" opacity="0.5" />
+        <ellipse cx="90" cy="28" rx="36" ry="27" fill="#a6e3e9" opacity="0.5" />
+      </svg>
+    </div>
+
     <!-- ══════ NAVBAR ══════ -->
     <nav class="t-navbar navbar navbar-expand-lg">
       <div class="container">
@@ -306,11 +752,10 @@
           data-bs-toggle="collapse"
           data-bs-target="#navMain"
         >
-          <span class="navbar-toggler-icon"></span>
+          <i class="bi bi-list fs-5" style="color: var(--text)"></i>
         </button>
 
         <div class="collapse navbar-collapse" id="navMain">
-          <!-- Nav links kiri -->
           <ul class="navbar-nav me-auto ms-3 mb-2 mb-lg-0 gap-1">
             <li class="nav-item">
               <a class="nav-link" href="#login">
@@ -325,8 +770,6 @@
               </a>
             </li>
           </ul>
-
-          <!-- Nav kanan: user chip + logout / tombol login -->
           <div class="d-flex align-items-center gap-2" id="nav-menus"></div>
         </div>
       </div>
@@ -364,29 +807,64 @@
       aria-hidden="true"
     >
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-          <!-- Header -->
-          <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title fw-bold" id="reportModalLabel">
-              <i class="bi bi-pencil-square me-2"></i>
-              Buat Laporan Baru
-            </h5>
+        <div class="modal-content">
+          <div class="modal-header">
+            <!-- Cute cartoon pencil illustration in header -->
+            <div style="display: flex; align-items: center; gap: 10px">
+              <svg width="36" height="36" viewBox="0 0 36 36">
+                <rect
+                  x="6"
+                  y="4"
+                  width="18"
+                  height="24"
+                  rx="3"
+                  fill="#a6e3e9"
+                />
+                <rect x="6" y="4" width="18" height="8" rx="3" fill="#71c9ce" />
+                <polygon points="6,28 24,28 15,35" fill="#fbbf24" />
+                <rect
+                  x="9"
+                  y="10"
+                  width="12"
+                  height="2"
+                  rx="1"
+                  fill="white"
+                  opacity="0.7"
+                />
+                <rect
+                  x="9"
+                  y="14"
+                  width="8"
+                  height="2"
+                  rx="1"
+                  fill="white"
+                  opacity="0.5"
+                />
+                <circle cx="28" cy="8" r="5" fill="#fbbf24" />
+                <text
+                  x="25.5"
+                  y="11"
+                  font-size="7"
+                  fill="white"
+                  font-weight="bold"
+                >
+                  ✎
+                </text>
+              </svg>
+              <h5 class="modal-title" id="reportModalLabel">
+                Buat Laporan Baru
+              </h5>
+            </div>
             <button
               type="button"
-              class="btn-close btn-close-white"
+              class="btn-close"
               data-bs-dismiss="modal"
-              aria-label="Close"
             ></button>
           </div>
-
-          <!-- Body -->
-          <div class="modal-body p-4">
+          <div class="modal-body">
             <form id="reportForm">
-              <!-- Judul -->
               <div class="mb-3">
-                <label class="form-label fw-semibold small">
-                  Judul Laporan
-                </label>
+                <label class="form-label">Judul Laporan</label>
                 <input
                   type="text"
                   id="fieldTitle"
@@ -395,23 +873,19 @@
                   required
                 />
               </div>
-
-              <!-- Kategori -->
               <div class="mb-3">
-                <label class="form-label fw-semibold small">Kategori</label>
+                <label class="form-label">Kategori</label>
                 <select id="fieldCategory" class="form-select" required>
                   <option value="">-- Pilih Kategori --</option>
-                  <option value="Banjir">Banjir</option>
-                  <option value="Jalan Rusak">Jalan Rusak</option>
-                  <option value="Sampah">Sampah</option>
-                  <option value="Lampu Mati">Lampu Mati</option>
-                  <option value="Lainnya">Lainnya</option>
+                  <option value="Banjir">🌊 Banjir</option>
+                  <option value="Jalan Rusak">🚧 Jalan Rusak</option>
+                  <option value="Sampah">🗑️ Sampah</option>
+                  <option value="Lampu Mati">💡 Lampu Mati</option>
+                  <option value="Lainnya">📌 Lainnya</option>
                 </select>
               </div>
-
-              <!-- Deskripsi -->
               <div class="mb-3">
-                <label class="form-label fw-semibold small">Deskripsi</label>
+                <label class="form-label">Deskripsi</label>
                 <textarea
                   id="fieldDescription"
                   class="form-control"
@@ -420,10 +894,8 @@
                   required
                 ></textarea>
               </div>
-
-              <!-- Lokasi -->
-              <div class="mb-3">
-                <label class="form-label fw-semibold small">Lokasi</label>
+              <div class="mb-2">
+                <label class="form-label">Lokasi</label>
                 <input
                   type="text"
                   id="fieldLocation"
@@ -434,21 +906,16 @@
               </div>
             </form>
           </div>
-
-          <!-- Footer tombol -->
-          <div class="modal-footer d-flex justify-content-between mt-4">
+          <div class="modal-footer d-flex justify-content-between">
             <button
               type="button"
-              class="btn btn-outline-secondary fw-bold px-4"
+              class="btn btn-outline-secondary px-4"
               id="btnDraft"
             >
+              <i class="bi bi-floppy me-1"></i>
               Simpan Draft
             </button>
-            <button
-              type="button"
-              class="btn btn-primary fw-bold px-4"
-              id="btnSubmit"
-            >
+            <button type="button" class="btn btn-primary px-4" id="btnSubmit">
               Ajukan
               <i class="bi bi-send-fill ms-1"></i>
             </button>
@@ -458,15 +925,13 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Scripts SPA (urutan penting!) -->
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/app.js"></script>
     <script src="js/router.js"></script>
 
     <script>
-      // Toast helper - bisa dipanggil dari mana saja: showToast('Pesan', 'success')
+      // ── Toast helper ──
       function showToast(message, type = "info") {
         const wrap = document.getElementById("toast-wrap");
         const iconMap = {
@@ -478,11 +943,11 @@
         const el = document.createElement("div");
         el.className = `t-toast ${type}`;
         el.innerHTML = `
-                <span class="t-toast__icon"><i class="bi ${iconMap[type] || iconMap.info}"></i></span>
-                <span class="t-toast__body">${message}</span>
-                <button class="t-toast__close" onclick="dismissToast(this.closest('.t-toast'))">
-                    <i class="bi bi-x-lg"></i>
-                </button>`;
+          <span class="t-toast__icon"><i class="bi ${iconMap[type] || iconMap.info}"></i></span>
+          <span class="t-toast__body">${message}</span>
+          <button class="t-toast__close" onclick="dismissToast(this.closest('.t-toast'))">
+            <i class="bi bi-x-lg"></i>
+          </button>`;
         wrap.appendChild(el);
         setTimeout(() => dismissToast(el), 4500);
       }
@@ -493,7 +958,7 @@
         setTimeout(() => el.remove(), 250);
       }
 
-      // Active nav highlight berdasarkan hash
+      // ── Active nav highlight ──
       function updateActiveNav() {
         const hash = window.location.hash || "#login";
         document.querySelectorAll(".nav-link").forEach((link) => {

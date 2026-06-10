@@ -320,27 +320,32 @@
           <ul class="navbar-nav me-auto ms-3 mb-2 mb-lg-0 gap-1">
             <li class="nav-item">
               <a class="nav-link" href="{% url 'home' %}">
-                <i class="bi bi-house-door"></i> Beranda
+                <i class="bi bi-house-door"></i>
+                Beranda
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'dashboard_index' %}">
-                <i class="bi bi-speedometer2"></i> Dashboard
+                <i class="bi bi-speedometer2"></i>
+                Dashboard
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'list_reports' %}">
-                <i class="bi bi-clipboard-data"></i> Laporan
+                <i class="bi bi-clipboard-data"></i>
+                Laporan
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'about' %}">
-                <i class="bi bi-info-circle"></i> Tentang
+                <i class="bi bi-info-circle"></i>
+                Tentang
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'contacts' %}">
-                <i class="bi bi-envelope"></i> Kontak
+                <i class="bi bi-envelope"></i>
+                Kontak
               </a>
             </li>
           </ul>
@@ -349,15 +354,15 @@
             {% if user.is_authenticated %}
             <div class="user-chip">
               <div class="user-avatar">{{ user.username|first|upper }}</div>
-              {{ user.username }} {% if user.is_admin %}<span
-                class="badge-admin"
-                >ADMIN</span
-              >{% endif %}
+              {{ user.username }} {% if user.is_admin %}
+              <span class="badge-admin">ADMIN</span>
+              {% endif %}
             </div>
             <form action="{% url 'logout' %}" method="post" class="m-0">
               {% csrf_token %}
               <button type="submit" class="btn btn-sm btn-outline-secondary">
-                <i class="bi bi-box-arrow-right me-1"></i>Keluar
+                <i class="bi bi-box-arrow-right me-1"></i>
+                Keluar
               </button>
             </form>
             {% else %}
@@ -365,10 +370,12 @@
               href="{% url 'register' %}"
               class="btn btn-sm btn-outline-primary"
             >
-              <i class="bi bi-person-plus me-1"></i>Daftar
+              <i class="bi bi-person-plus me-1"></i>
+              Daftar
             </a>
             <a href="{% url 'login' %}" class="btn btn-sm btn-primary">
-              <i class="bi bi-lightning-charge me-1"></i>Masuk
+              <i class="bi bi-lightning-charge me-1"></i>
+              Masuk
             </a>
             {% endif %}
           </div>
@@ -382,14 +389,15 @@
       {% for message in messages %}
       <div class="t-toast {{ message.tags }}">
         <span class="t-toast__icon">
-          {% if message.tags == 'success' %}<i
-            class="bi bi-check-circle-fill"
-          ></i>
-          {% elif message.tags == 'danger' %}<i class="bi bi-x-circle-fill"></i>
-          {% elif message.tags == 'warning' %}<i
-            class="bi bi-exclamation-triangle-fill"
-          ></i>
-          {% else %}<i class="bi bi-info-circle-fill"></i>{% endif %}
+          {% if message.tags == 'success' %}
+          <i class="bi bi-check-circle-fill"></i>
+          {% elif message.tags == 'danger' %}
+          <i class="bi bi-x-circle-fill"></i>
+          {% elif message.tags == 'warning' %}
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          {% else %}
+          <i class="bi bi-info-circle-fill"></i>
+          {% endif %}
         </span>
         <span class="t-toast__body">{{ message }}</span>
         <button
@@ -413,10 +421,10 @@
       <div
         class="container d-flex flex-wrap justify-content-between align-items-center gap-2"
       >
-        <span
-          ><span class="online-dot"></span>TheoTown City · Sistem Manajemen Kota
-          Terpadu</span
-        >
+        <span>
+          <span class="online-dot"></span>
+          TheoTown City · Sistem Manajemen Kota Terpadu
+        </span>
         <span>PIE 1416 · Teknologi Rekayasa Internet</span>
       </div>
     </footer>
