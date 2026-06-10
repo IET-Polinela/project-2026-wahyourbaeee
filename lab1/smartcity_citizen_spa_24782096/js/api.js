@@ -2,7 +2,7 @@
 // api.js - Fungsi komunikasi terpusat ke Backend Django API
 // ============================================================
 
-const BASE_URL = 'http://103.151.63.88:9011';
+const BASE_URL = 'http://103.151.63.88:8011';
 
 /**
  * requestAPI - Wrapper fetch() dengan JWT otomatis
