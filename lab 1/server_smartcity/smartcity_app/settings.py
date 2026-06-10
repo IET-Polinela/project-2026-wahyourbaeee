@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-@^s(pe##r6$rw9z)7^1qpm=a!t-oj+3#7t!94e&7j653$^&8tt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.7', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -129,6 +129,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+CORS_ALLOW_ALL_ORIGINS = True
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 AUTH_USER_MODEL = 'usermanagement_24782096.User'
 LOGIN_REDIRECT_URL = 'list_reports' # Nama path daftar laporan 
@@ -151,5 +153,3 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
-
-CORS_ALLOW_ALL_ORIGINS = True
