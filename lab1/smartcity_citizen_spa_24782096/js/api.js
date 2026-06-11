@@ -4,41 +4,89 @@
 
 const BASE_URL = 'http://103.151.63.88:8011';
 
-/**
- * requestAPI - Wrapper fetch() dengan JWT otomatis
- * @param {string} endpoint  - Contoh: '/api/token/', '/api/laporan/'
- * @param {string} method    - 'GET', 'POST', 'PUT', 'DELETE'
- * @param {object} bodyData  - Data yang dikirim (opsional, untuk POST/PUT)
- * @returns {Promise<Response>}
- */
+// ── Auto logout saat idle ──
+let _idleTimer = null;
+const IDLE_TIMEOUT = 15 * 60 * 1000; // 15 menit
+
+function resetIdleTimer() {
+    if (!isLoggedIn()) return;
+    clearTimeout(_idleTimer);
+    _idleTimer = setTimeout(() => {
+        showToast('Sesi kamu berakhir karena tidak aktif.', 'warning');
+        setTimeout(() => logout(), 2000);
+    }, IDLE_TIMEOUT);
+}
+
+// Pantau aktivitas user
+['click', 'keydown', 'mousemove', 'touchstart', 'scroll'].forEach(evt =>
+    document.addEventListener(evt, resetIdleTimer, { passive: true })
+);
+
+// Mulai timer saat halaman dimuat
+window.addEventListener('DOMContentLoaded', () => {
+    if (isLoggedIn()) resetIdleTimer();
+});
+
+// ── Coba refresh access token ──
+async function tryRefreshToken() {
+    const refreshToken = localStorage.getItem('refresh_token');
+    if (!refreshToken) return false;
+
+    try {
+        const res = await fetch(BASE_URL + '/api/token/refresh/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refresh: refreshToken }),
+        });
+
+        if (res.status === 200) {
+            const data = await res.json();
+            localStorage.setItem('access_token', data.access);
+            return true;
+        }
+    } catch (e) {
+        console.error('Refresh token error:', e);
+    }
+
+    return false;
+}
+
+// ── requestAPI ──
 async function requestAPI(endpoint, method = 'GET', bodyData = null) {
-    // Ambil access token dari localStorage (null jika belum login)
     const accessToken = localStorage.getItem('access_token');
 
-    // Susun headers dasar
-    const headers = {
-        'Content-Type': 'application/json',
-    };
+    const headers = { 'Content-Type': 'application/json' };
+    if (accessToken) headers['Authorization'] = `Bearer ${accessToken}`;
 
-    // Sisipkan token ke Authorization jika tersedia
-    if (accessToken) {
-        headers['Authorization'] = `Bearer ${accessToken}`;
-    }
-
-    // Susun opsi fetch
-    const options = {
-        method: method,
-        headers: headers,
-    };
-
-    // Tambahkan body jika ada data (POST/PUT)
-    if (bodyData) {
-        options.body = JSON.stringify(bodyData);
-    }
+    const options = { method, headers };
+    if (bodyData) options.body = JSON.stringify(bodyData);
 
     try {
         const response = await fetch(BASE_URL + endpoint, options);
+
+        // Jika 401 → coba refresh token dulu
+        if (response.status === 401) {
+            const refreshed = await tryRefreshToken();
+
+            if (refreshed) {
+                // Retry request dengan token baru
+                const newToken = localStorage.getItem('access_token');
+                headers['Authorization'] = `Bearer ${newToken}`;
+                return await fetch(BASE_URL + endpoint, {
+                    method,
+                    headers,
+                    body: options.body ?? undefined,
+                });
+            } else {
+                // Refresh juga gagal → paksa logout
+                showToast('Sesi kamu telah berakhir. Silakan login kembali.', 'warning');
+                setTimeout(() => logout(), 2000);
+                return response;
+            }
+        }
+
         return response;
+
     } catch (error) {
         console.error('requestAPI Error:', error);
         throw error;
