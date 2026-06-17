@@ -6,6 +6,8 @@ from django.contrib.auth import views as auth_views
 from usermanagement_24782096.api_views import RegisterView
 from usermanagement_24782096.views import register_citizen
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from django_scalar.views import scalar_viewer
 
 
 
@@ -25,5 +27,12 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/register/', RegisterView.as_view(), name='api_register'),
 
+    # ... API route...
+    # 1. Endpoint untuk meng-generate file skema mentah (JSON/YAML)
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    # 2. Endpoint Swagger UI
+    path('api/docs/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    # 3. Endpoint Scalar UI
+    path('api/docs/scalar/', scalar_viewer, name='scalar-ui'),
 ]
 
