@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_spectacular',
+    'django_scalar',
     'corsheaders',
     'usermanagement_24782096',
     'dashboard_24782096',
