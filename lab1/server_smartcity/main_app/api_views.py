@@ -4,6 +4,8 @@ from .models import Report
 from .serializers import ReportSerializer, ReportStatusSerializer
 from .permissions import IsOwnerAndDraftOrReadOnly, IsAdminUpdateStatusOnly
 from django.db.models import Q
+from drf_spectacular.utils import extend_schema
+
 
 class ReportPagination(PageNumberPagination):
     page_size = 10
@@ -11,7 +13,6 @@ class ReportPagination(PageNumberPagination):
     max_page_size = 100
 
 class ReportViewSet(viewsets.ModelViewSet):
-    # deklarasi pagationdalam viewset
     serializer_class = ReportSerializer
     pagination_class = ReportPagination
 
@@ -45,6 +46,16 @@ class ReportViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save(reporter=self.request.user)
+    
+    @extend_schema(
+    request=ReportSerializer,
+    responses={201: ReportSerializer},
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
-
+    @extend_schema(exclude=True)  # ← masuk ke dalam class yang sama
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+    
     
