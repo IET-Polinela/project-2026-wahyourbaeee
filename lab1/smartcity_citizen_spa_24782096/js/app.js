@@ -230,10 +230,10 @@ async function editDraft(id) {
     const report = await response.json();
 
     // Isi form modal dengan data lama
-    document.getElementById('fieldTitle').value       = report.title;
-    document.getElementById('fieldCategory').value    = report.category;
-    document.getElementById('fieldDescription').value = report.description;
-    document.getElementById('fieldLocation').value    = report.location;
+    document.getElementById('inputTitle').value       = report.title;
+    document.getElementById('inputCategory').value    = report.category;
+    document.getElementById('inputDescription').value = report.description;
+    document.getElementById('inputLocation').value    = report.location;
 
     // Set mode edit
     editingReportId = id;
@@ -261,10 +261,10 @@ function setupModalButtons() {
 }
 
 async function submitReport(status) {
-    const title       = document.getElementById('fieldTitle')?.value.trim();
-    const category    = document.getElementById('fieldCategory')?.value;
-    const description = document.getElementById('fieldDescription')?.value.trim();
-    const location    = document.getElementById('fieldLocation')?.value.trim();
+    const title       = document.getElementById('inputTitle')?.value.trim();
+    const category    = document.getElementById('inputCategory')?.value;
+    const description = document.getElementById('inputDescription')?.value.trim();
+    const location    = document.getElementById('inputLocation')?.value.trim();
 
     if (!title || !category || !description || !location) {
         showToast('Semua field wajib diisi!', 'warning');

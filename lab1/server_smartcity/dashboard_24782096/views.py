@@ -3,8 +3,11 @@ from django.http import JsonResponse
 from main_app.models import Report
 from django.db.models import Count
 from django.views.generic import TemplateView
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
 
 # CBV untuk halaman utama dashboard 
+@method_decorator(staff_member_required, name='dispatch')
 class DashboardView(TemplateView):
     template_name = 'dashboard/index.html'
 

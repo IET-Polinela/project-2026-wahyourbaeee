@@ -144,7 +144,7 @@ const routes = {
 
                     <!-- Tombol Laporan Baru -->
                     <div class="d-grid mb-3">
-                        <button class="btn btn-primary btn-sm text-start rounded-3"
+                        <button id="btnBukaModal" class="btn btn-primary btn-sm text-start rounded-3"
                             data-bs-toggle="modal" data-bs-target="#reportModal"
                             onclick="setupModalButtons()">
                             <i class="bi bi-plus-circle-fill me-2"></i>Laporan Baru
@@ -155,7 +155,7 @@ const routes = {
                     <h6 class="fw-bold mb-2 text-muted small text-uppercase">
                         <i class="bi bi-bar-chart me-1"></i>Rekap Laporan Saya
                     </h6>
-                    <div class="d-flex flex-column gap-2 mb-3">
+                    <div class="d-flex flex-column gap-2 mb-3" id="summaryStats">
                         <div class="d-flex justify-content-between align-items-center p-2 rounded-3 bg-light">
                             <span class="small"><i class="bi bi-file-earmark me-1 text-secondary"></i>Draft</span>
                             <span class="badge bg-secondary" id="statDraft">0</span>
@@ -189,7 +189,7 @@ const routes = {
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link" id="tabFeed"
+                        <button class="nav-link" id="tabFeedKota"
                             onclick="switchTab('feed')">
                             <i class="bi bi-globe2 me-1"></i>Feed Kota
                         </button>
@@ -274,7 +274,7 @@ function handleRouting() {
 // ============================================================
 function switchTab(tab) {
     document.getElementById('tabMyReports')?.classList.toggle('active', tab === 'my_reports');
-    document.getElementById('tabFeed')?.classList.toggle('active', tab === 'feed');
+    document.getElementById('tabFeedKota')?.classList.toggle('active', tab === 'feed');
     loadDashboardData(tab, 1);
 }
 

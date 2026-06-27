@@ -12,7 +12,8 @@
 
   {% if user.is_authenticated and user.is_admin %}
   <a href="{% url 'add_report' %}" class="btn btn-primary shadow-sm">
-    <i class="bi bi-plus-circle"></i> Buat Laporan Baru
+    <i class="bi bi-plus-circle"></i>
+    Buat Laporan Baru
   </a>
   {% endif %}
 </div>
@@ -24,7 +25,7 @@
     </span>
     <input
       type="text"
-      id="search-input"
+      id="searchInput"
       class="form-control border-start-0 ps-0"
       placeholder="Cari laporan berdasarkan judul secara instan..."
     />
@@ -33,7 +34,7 @@
 
 <div class="table-responsive">
   <table
-    id="report-table"
+    id="reportTable"
     class="table table-hover align-middle shadow-sm bg-white border"
   >
     <thead class="table-dark">
@@ -44,7 +45,7 @@
         <th class="text-center">Aksi</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="reportTableBody">
       {% for item in laporan %}
       <tr>
         <td><strong>{{ item.title }}</strong></td>
@@ -67,7 +68,8 @@
               class="btn btn-primary btn-sm btn-detail"
               data-id="{{ item.id }}"
             >
-              <i class="bi bi-eye"></i> Detail
+              <i class="bi bi-eye"></i>
+              Detail
             </button>
 
             {% if user.is_admin %}
@@ -151,15 +153,15 @@
       </div>
       <div class="modal-body">
         <div class="mb-3">
-          <label class="fw-bold text-muted small text-uppercase"
-            >Kategori</label
-          >
+          <label class="fw-bold text-muted small text-uppercase">
+            Kategori
+          </label>
           <p id="modalCategory" class="mb-0"></p>
         </div>
         <div class="mb-3">
-          <label class="fw-bold text-muted small text-uppercase"
-            >Deskripsi</label
-          >
+          <label class="fw-bold text-muted small text-uppercase">
+            Deskripsi
+          </label>
           <p id="modalDesc" class="mb-0 text-dark"></p>
         </div>
         <div class="mb-3">
@@ -178,8 +180,8 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const searchInput = document.getElementById("search-input");
-    const tableBody = document.querySelector("#report-table tbody");
+    const searchInput = document.getElementById("searchInput");
+    const tableBody = document.querySelector("#reportTable tbody");
 
     // 1. Live Search dengan Debouncing
     let debounceTimer;

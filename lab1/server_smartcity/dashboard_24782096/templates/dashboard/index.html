@@ -173,17 +173,21 @@
 <div class="dash-header">
   <div>
     <h1 class="dash-title">
-      <i class="bi bi-speedometer2 me-2" style="color: #3b82f6"></i>City
-      Dashboard
+      <i class="bi bi-speedometer2 me-2" style="color: #3b82f6"></i>
+      City Dashboard
     </h1>
     <p class="dash-subtitle">
       Statistik laporan warga kota TheoTown secara real-time
     </p>
   </div>
   <div class="d-flex align-items-center gap-2">
-    <span class="live-badge"><span class="live-dot"></span>Live Data</span>
+    <span class="live-badge">
+      <span class="live-dot"></span>
+      Live Data
+    </span>
     <a href="{% url 'list_reports' %}" class="btn btn-sm btn-primary">
-      <i class="bi bi-clipboard-data me-1"></i>Kelola Laporan
+      <i class="bi bi-clipboard-data me-1"></i>
+      Kelola Laporan
     </a>
   </div>
 </div>
@@ -272,15 +276,19 @@
         class="table-card-header"
         style="background: #eff6ff; color: #1d4ed8"
       >
-        <i class="bi bi-clock-history"></i> 5 Laporan Terbaru
+        <i class="bi bi-clock-history"></i>
+        5 Laporan Terbaru
         <span class="ms-auto">
-          <span class="status-badge" style="background: #dbeafe; color: #1d4ed8"
-            >REPORTED</span
+          <span
+            class="status-badge"
+            style="background: #dbeafe; color: #1d4ed8"
           >
+            REPORTED
+          </span>
         </span>
       </div>
       <div class="table-responsive">
-        <table class="table table-hover mb-0" id="tableReported">
+        <table class="table table-hover mb-0" id="reportedTable">
           <thead>
             <tr>
               <th>Judul</th>
@@ -290,8 +298,8 @@
           <tbody>
             <tr>
               <td colspan="2" class="text-center text-muted py-3">
-                <span class="spinner-border spinner-border-sm me-2"></span
-                >Memuat...
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Memuat...
               </td>
             </tr>
           </tbody>
@@ -306,15 +314,19 @@
         class="table-card-header"
         style="background: #f0fdf4; color: #15803d"
       >
-        <i class="bi bi-check2-circle"></i> 5 Laporan Selesai
+        <i class="bi bi-check2-circle"></i>
+        5 Laporan Selesai
         <span class="ms-auto">
-          <span class="status-badge" style="background: #dcfce7; color: #15803d"
-            >RESOLVED</span
+          <span
+            class="status-badge"
+            style="background: #dcfce7; color: #15803d"
           >
+            RESOLVED
+          </span>
         </span>
       </div>
       <div class="table-responsive">
-        <table class="table table-hover mb-0" id="tableResolved">
+        <table class="table table-hover mb-0" id="resolvedTable">
           <thead>
             <tr>
               <th>Judul</th>
@@ -324,8 +336,8 @@
           <tbody>
             <tr>
               <td colspan="2" class="text-center text-muted py-3">
-                <span class="spinner-border spinner-border-sm me-2"></span
-                >Memuat...
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Memuat...
               </td>
             </tr>
           </tbody>
