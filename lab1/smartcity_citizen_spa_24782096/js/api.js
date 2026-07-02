@@ -78,9 +78,9 @@ async function requestAPI(endpoint, method = 'GET', bodyData = null) {
                     body: options.body ?? undefined,
                 });
             } else {
-                // Refresh juga gagal → paksa logout
-                showToast('Sesi kamu telah berakhir. Silakan login kembali.', 'warning');
-                setTimeout(() => logout(), 2000);
+                localStorage.clear();
+                window.location.hash = '#login';
+                showToast('Sesi kamu telah berakhir.', 'warning');
                 return response;
             }
         }
