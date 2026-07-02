@@ -436,7 +436,7 @@
         });
 
         // ── Tabel REPORTED ──
-        const repBody = document.querySelector("#tableReported tbody");
+        const repBody = document.querySelector("#reportedTable tbody"); // SEBELUMNYA #tableReported
         repBody.innerHTML = "";
         if (data.latest_reported.length === 0) {
           repBody.innerHTML =
@@ -452,7 +452,7 @@
         }
 
         // ── Tabel RESOLVED ──
-        const resBody = document.querySelector("#tableResolved tbody");
+        const resBody = document.querySelector("#resolvedTable tbody"); // SEBELUMNYA #tableResolved
         resBody.innerHTML = "";
         if (data.latest_resolved.length === 0) {
           resBody.innerHTML =

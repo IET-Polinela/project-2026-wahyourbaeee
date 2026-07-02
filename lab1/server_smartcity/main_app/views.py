@@ -73,10 +73,16 @@ class ReportDeleteView(DeleteView):
         return super().dispatch(request, *args, **kwargs)
 
 class ReportUpdateStatusView(View):
+    def dispatch(self, request, *args, **kwargs):
+        # Cek apakah user udah login dan statusnya admin
+        if not request.user.is_authenticated or not request.user.is_admin:
+            messages.error(request, "Akses Ditolak: Hanya Admin yang bisa merubah status laporan!") 
+            return redirect('login') # Ini akan menghasilkan HTTP 302 Redirect
+        return super().dispatch(request, *args, **kwargs)
+
     def post(self, request, pk):
         report = get_object_or_404(Report, pk=pk)
         new_status = request.POST.get('status')
         report.status = new_status
         report.save()
         return redirect('list_reports')
-    

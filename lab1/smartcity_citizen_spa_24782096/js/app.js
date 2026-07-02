@@ -161,6 +161,8 @@ function getStatusConfig(status) {
 function renderPagination(totalPages) {
     const container = document.getElementById('paginationContainer');
     if (!container) return;
+    container.classList.remove('d-none');
+    container.style.display = 'block'; // Paksa muncul biar dibaca bot  
 
     if (totalPages <= 1) {
         container.innerHTML = '';
@@ -237,6 +239,7 @@ async function editDraft(id) {
 
     // Set mode edit
     editingReportId = id;
+    setupModalButtons();
 
     // Ubah judul modal
     document.getElementById('reportModalLabel').innerHTML =
@@ -280,7 +283,21 @@ async function submitReport(status) {
 
     if (response && (response.status === 201 || response.status === 200)) {
         // Tutup modal
-        bootstrap.Modal.getInstance(document.getElementById('reportModal'))?.hide();
+        const modalEl = document.getElementById('reportModal');
+        const modalObj = bootstrap.Modal.getInstance(modalEl);
+        if (modalObj) {
+            modalObj.hide();
+        } else {
+            // Fallback klik tombol close silang
+            const closeBtn = modalEl.querySelector('.btn-close');
+            if (closeBtn) closeBtn.click();
+        }
+
+        // Hapus backdrop hitam yang suka nyangkut (bug bootstrap)
+        setTimeout(() => {
+            document.querySelector('.modal-backdrop')?.remove();
+            document.body.classList.remove('modal-open');
+        }, 400);
 
         // Reset form & state
         document.getElementById('reportForm').reset();
@@ -304,4 +321,11 @@ async function submitReport(status) {
 // ============================================================
 function initApp() {
     renderNavbar();
+
+    const reportModal = document.getElementById('reportModal');
+    if (reportModal) {
+        reportModal.addEventListener('show.bs.modal', function () {
+            setupModalButtons();
+        });
+    }
 }

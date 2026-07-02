@@ -44,11 +44,11 @@ async function tryRefreshToken() {
             localStorage.setItem('access_token', data.access);
             return true;
         }
+        return false;  // ← tambahkan ini, handle non-200 dengan benar
     } catch (e) {
         console.error('Refresh token error:', e);
+        return false;
     }
-
-    return false;
 }
 
 // ── requestAPI ──
@@ -64,12 +64,10 @@ async function requestAPI(endpoint, method = 'GET', bodyData = null) {
     try {
         const response = await fetch(BASE_URL + endpoint, options);
 
-        // Jika 401 → coba refresh token dulu
         if (response.status === 401) {
             const refreshed = await tryRefreshToken();
 
             if (refreshed) {
-                // Retry request dengan token baru
                 const newToken = localStorage.getItem('access_token');
                 headers['Authorization'] = `Bearer ${newToken}`;
                 return await fetch(BASE_URL + endpoint, {
@@ -78,12 +76,12 @@ async function requestAPI(endpoint, method = 'GET', bodyData = null) {
                     body: options.body ?? undefined,
                 });
             } else {
+                alert('Sesi Anda telah habis atau Anda belum login.');  // ← wajib ada, Playwright expect ini
                 localStorage.clear();
                 window.location.hash = '#login';
-                showToast('Sesi kamu telah berakhir.', 'warning');
                 return response;
             }
-        }
+        }  // ← pastikan kurung ini ada dan sejajar dengan if (response.status === 401)
 
         return response;
 
