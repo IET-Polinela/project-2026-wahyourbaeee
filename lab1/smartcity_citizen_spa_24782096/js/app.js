@@ -6,6 +6,9 @@ let editingReportId = null;
 let currentTab = 'my_reports';
 let currentPage = 1;
 
+// ============================================================
+// renderNavbar
+// ============================================================
 function renderNavbar() {
     const navMenus = document.getElementById('nav-menus');
     if (!navMenus) return;
@@ -32,6 +35,9 @@ function renderNavbar() {
     }
 }
 
+// ============================================================
+// loadDashboardData
+// ============================================================
 async function loadDashboardData(tab = currentTab, page = currentPage) {
     currentTab = tab;
     currentPage = page;
@@ -40,9 +46,9 @@ async function loadDashboardData(tab = currentTab, page = currentPage) {
 
     if (response && response.status === 200) {
         const data = await response.json();
-        const reports     = data.results ?? [];
-        const totalCount  = data.count ?? 0;
-        const totalPages  = Math.ceil(totalCount / 10);
+        const reports    = data.results ?? [];
+        const totalCount = data.count ?? 0;
+        const totalPages = Math.ceil(totalCount / 10);
 
         renderList(reports, tab);
         renderPagination(totalPages);
@@ -63,6 +69,9 @@ async function loadDashboardData(tab = currentTab, page = currentPage) {
     }
 }
 
+// ============================================================
+// renderList
+// ============================================================
 function renderList(reports, tab) {
     const listContainer = document.getElementById('listContainer');
     if (!listContainer) return;
@@ -80,6 +89,7 @@ function renderList(reports, tab) {
     listContainer.innerHTML = reports.map(report => {
         const statusConfig = getStatusConfig(report.status);
         const isOwner = report.is_owner;
+
         const editBtn = (isOwner && report.status === 'DRAFT') ? `
             <button class="btn btn-sm btn-outline-warning" onclick="editDraft(${report.id})">
                 <i class="bi bi-pencil me-1"></i>Edit
@@ -122,9 +132,12 @@ function renderList(reports, tab) {
     }).join('');
 }
 
+// ============================================================
+// getStatusConfig
+// ============================================================
 function getStatusConfig(status) {
     const map = {
-        'DRAFT':       { label: 'Draft',      color: '#94a3b8', progress: 10  },
+        'DRAFT':       { label: 'Draft',       color: '#94a3b8', progress: 10  },
         'REPORTED':    { label: 'Dilaporkan',   color: '#3b82f6', progress: 30  },
         'VERIFIED':    { label: 'Diverifikasi', color: '#f59e0b', progress: 50  },
         'IN_PROGRESS': { label: 'Diproses',     color: '#8b5cf6', progress: 75  },
@@ -133,12 +146,13 @@ function getStatusConfig(status) {
     return map[status] || { label: status, color: '#94a3b8', progress: 0 };
 }
 
+// ============================================================
+// renderPagination
+// ============================================================
 function renderPagination(totalPages) {
     const container = document.getElementById('paginationContainer');
     if (!container) return;
-    
-    // Paksa kelihatan biar bot Playwright baca
-    container.classList.remove('d-none', 'hidden');
+    container.classList.remove('d-none');
     container.style.display = 'block';
 
     if (totalPages <= 1) {
@@ -147,6 +161,7 @@ function renderPagination(totalPages) {
     }
 
     let html = '<nav><ul class="pagination pagination-sm justify-content-center mb-0">';
+
     html += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
         <button class="page-link" onclick="loadDashboardData('${currentTab}', ${currentPage - 1})">
             <i class="bi bi-chevron-left"></i>
@@ -163,10 +178,15 @@ function renderPagination(totalPages) {
         <button class="page-link" onclick="loadDashboardData('${currentTab}', ${currentPage + 1})">
             <i class="bi bi-chevron-right"></i>
         </button>
-    </li></ul></nav>`;
+    </li>`;
+
+    html += '</ul></nav>';
     container.innerHTML = html;
 }
 
+// ============================================================
+// loadSummaryStats
+// ============================================================
 async function loadSummaryStats() {
     const response = await requestAPI('/api/report/?tab=my_reports&page_size=1000', 'GET');
     if (!response || response.status !== 200) return;
@@ -174,45 +194,62 @@ async function loadSummaryStats() {
     const data = await response.json();
     const all  = data.results ?? [];
 
-    const draft     = all.filter(r => r.status === 'DRAFT').length;
-    const diproses  = all.filter(r => ['REPORTED','VERIFIED','IN_PROGRESS'].includes(r.status)).length;
-    const selesai   = all.filter(r => r.status === 'RESOLVED').length;
+    const draft    = all.filter(r => r.status === 'DRAFT').length;
+    const diproses = all.filter(r => ['REPORTED','VERIFIED','IN_PROGRESS'].includes(r.status)).length;
+    const selesai  = all.filter(r => r.status === 'RESOLVED').length;
 
     const elDraft    = document.getElementById('statDraft');
     const elDiproses = document.getElementById('statDiproses');
     const elSelesai  = document.getElementById('statSelesai');
 
-    if (elDraft)    elDraft.textContent   = draft;
+    if (elDraft)    elDraft.textContent    = draft;
     if (elDiproses) elDiproses.textContent = diproses;
     if (elSelesai)  elSelesai.textContent  = selesai;
 }
 
+// ============================================================
+// editDraft
+// ============================================================
 async function editDraft(id) {
     const response = await requestAPI(`/api/report/${id}/`, 'GET');
     if (!response || response.status !== 200) {
         showToast('Gagal mengambil data laporan.', 'danger');
         return;
     }
+
     const report = await response.json();
+
     document.getElementById('inputTitle').value       = report.title;
     document.getElementById('inputCategory').value    = report.category;
     document.getElementById('inputDescription').value = report.description;
     document.getElementById('inputLocation').value    = report.location;
 
     editingReportId = id;
-    document.getElementById('reportModalLabel').innerHTML = '<i class="bi bi-pencil-square me-2"></i>Edit Draft Laporan';
+    setupModalButtons();
+
+    document.getElementById('reportModalLabel').innerHTML =
+        '<i class="bi bi-pencil-square me-2"></i>Edit Draft Laporan';
+
     const modal = new bootstrap.Modal(document.getElementById('reportModal'));
     modal.show();
 }
 
+// ============================================================
+// setupModalButtons
+// ============================================================
 function setupModalButtons() {
     const btnDraft  = document.getElementById('btnDraft');
     const btnSubmit = document.getElementById('btnSubmit');
+
     if (!btnDraft || !btnSubmit) return;
-    btnDraft.onclick = () => submitReport('DRAFT');
+
+    btnDraft.onclick  = () => submitReport('DRAFT');
     btnSubmit.onclick = () => submitReport('REPORTED');
 }
 
+// ============================================================
+// submitReport
+// ============================================================
 async function submitReport(status) {
     const title       = document.getElementById('inputTitle')?.value.trim();
     const category    = document.getElementById('inputCategory')?.value;
@@ -232,7 +269,6 @@ async function submitReport(status) {
     const response = await requestAPI(endpoint, method, bodyData);
 
     if (response && (response.status === 201 || response.status === 200)) {
-        // Tutup modal paksa biar Playwright sadar
         const modalEl = document.getElementById('reportModal');
         const modalObj = bootstrap.Modal.getInstance(modalEl);
         if (modalObj) {
@@ -241,20 +277,19 @@ async function submitReport(status) {
             const closeBtn = modalEl.querySelector('.btn-close');
             if (closeBtn) closeBtn.click();
         }
-        
-        // Bersihin background item modal 
+
         setTimeout(() => {
             document.querySelector('.modal-backdrop')?.remove();
             document.body.classList.remove('modal-open');
-            document.body.style.overflow = 'auto';
-            document.body.style.paddingRight = '0px';
-        }, 300);
+        }, 400);
 
         document.getElementById('reportForm').reset();
         editingReportId = null;
-        document.getElementById('reportModalLabel').innerHTML = '<i class="bi bi-pencil-square me-2"></i>Buat Laporan Baru';
+        document.getElementById('reportModalLabel').innerHTML =
+            '<i class="bi bi-pencil-square me-2"></i>Buat Laporan Baru';
 
         showToast(isEdit ? 'Laporan berhasil diperbarui!' : 'Laporan berhasil dibuat!', 'success');
+
         loadDashboardData(currentTab, currentPage);
 
     } else {
@@ -263,6 +298,16 @@ async function submitReport(status) {
     }
 }
 
+// ============================================================
+// initApp
+// ============================================================
 function initApp() {
     renderNavbar();
+
+    const reportModal = document.getElementById('reportModal');
+    if (reportModal) {
+        reportModal.addEventListener('show.bs.modal', function () {
+            setupModalButtons();
+        });
+    }
 }

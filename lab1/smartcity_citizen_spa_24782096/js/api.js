@@ -6,7 +6,7 @@ const BASE_URL = 'http://103.151.63.88:8011';
 
 // ── Auto logout saat idle ──
 let _idleTimer = null;
-const IDLE_TIMEOUT = 15 * 60 * 1000; // 15 menit
+const IDLE_TIMEOUT = 15 * 60 * 1000;
 
 function resetIdleTimer() {
     if (!isLoggedIn()) return;
@@ -17,12 +17,10 @@ function resetIdleTimer() {
     }, IDLE_TIMEOUT);
 }
 
-// Pantau aktivitas user
 ['click', 'keydown', 'mousemove', 'touchstart', 'scroll'].forEach(evt =>
     document.addEventListener(evt, resetIdleTimer, { passive: true })
 );
 
-// Mulai timer saat halaman dimuat
 window.addEventListener('DOMContentLoaded', () => {
     if (isLoggedIn()) resetIdleTimer();
 });
@@ -44,10 +42,11 @@ async function tryRefreshToken() {
             localStorage.setItem('access_token', data.access);
             return true;
         }
+        return false;
     } catch (e) {
         console.error('Refresh token error:', e);
+        return false;
     }
-    return false;
 }
 
 // ── requestAPI ──
@@ -63,12 +62,23 @@ async function requestAPI(endpoint, method = 'GET', bodyData = null) {
     try {
         const response = await fetch(BASE_URL + endpoint, options);
 
-        // Jika 401 → Token mati / tidak valid (Biar Playwright lolos)
         if (response.status === 401) {
-            alert('Sesi Anda telah habis atau Anda belum login.');
-            localStorage.clear();
-            window.location.hash = '#login';
-            return null; // Stop eksekusi
+            const refreshed = await tryRefreshToken();
+
+            if (refreshed) {
+                const newToken = localStorage.getItem('access_token');
+                headers['Authorization'] = `Bearer ${newToken}`;
+                return await fetch(BASE_URL + endpoint, {
+                    method,
+                    headers,
+                    body: options.body ?? undefined,
+                });
+            } else {
+                alert('Sesi Anda telah habis atau Anda belum login.');
+                localStorage.clear();
+                window.location.hash = '#login';
+                return response;
+            }
         }
 
         return response;
