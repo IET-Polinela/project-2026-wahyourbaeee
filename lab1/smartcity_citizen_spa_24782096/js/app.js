@@ -5,6 +5,19 @@
 let editingReportId = null;
 let currentTab = 'my_reports';
 let currentPage = 1;
+let lastReports = []; // cache data laporan yang sedang tampil (untuk editDraft)
+
+// ============================================================
+// initApp
+// ============================================================
+// Dipanggil sekali saat DOMContentLoaded, sebelum handleRouting().
+// PENTING: fungsi ini WAJIB ada, karena router.js memanggilnya duluan.
+// Sebelumnya fungsi ini tidak pernah didefinisikan sehingga menyebabkan
+// ReferenceError dan handleRouting() ikut gagal dijalankan (SPA blank).
+// ============================================================
+function initApp() {
+    renderNavbar();
+}
 
 // ============================================================
 // renderNavbar
@@ -49,6 +62,8 @@ async function loadDashboardData(tab = currentTab, page = currentPage) {
         const reports    = data.results ?? [];
         const totalCount = data.count ?? 0;
         const totalPages = Math.ceil(totalCount / 10);
+
+        lastReports = reports; // simpan cache untuk keperluan editDraft()
 
         renderList(reports, tab);
         renderPagination(totalPages);
@@ -101,7 +116,7 @@ function renderList(reports, tab) {
                     <i class="bi bi-geo-alt me-1"></i>${report.location}
                 </p>
                 <p class="text-muted small mb-2">
-                    <i class="bi bi-person me-1"></i>${report.reporter}
+                    <i class="bi bi-person me-1"></i>${report.reporter_name ?? report.reporter ?? 'Warga Anonim'}
                 </p>
                 <div class="mb-2">
                     <div class="progress" style="height:6px;">
@@ -197,5 +212,134 @@ async function loadSummaryStats() {
 }
 
 // ============================================================
+// setupModalButtons
+// ============================================================
+// Dipanggil lewat onclick="setupModalButtons()" pada tombol
+// "Laporan Baru" (#btnBukaModal). Tugasnya: mereset modal ke mode
+// "buat laporan baru" (bukan mode edit) dan memasang ulang event
+// listener pada tombol Draft/Ajukan.
+// ============================================================
+function setupModalButtons() {
+    editingReportId = null;
+
+    const modalLabel = document.getElementById('reportModalLabel');
+    const form       = document.getElementById('reportForm');
+    const btnDraft   = document.getElementById('btnDraft');
+    const btnSubmit  = document.getElementById('btnSubmit');
+
+    if (modalLabel) modalLabel.textContent = 'Buat Laporan Baru';
+    if (form) form.reset();
+    if (btnDraft)  btnDraft.style.display = '';
+    if (btnSubmit) btnSubmit.innerHTML = 'Ajukan <i class="bi bi-send-fill ms-1"></i>';
+
+    setupReportForm();
+}
+
+// ============================================================
+// setupReportForm
+// ============================================================
+// Memasang event listener ke tombol #btnDraft dan #btnSubmit.
+// Menggunakan cloneNode agar listener lama (dari pemanggilan
+// sebelumnya) tidak menumpuk / duplikat.
+// ============================================================
+function setupReportForm() {
+    const btnDraft  = document.getElementById('btnDraft');
+    const btnSubmit = document.getElementById('btnSubmit');
+    if (!btnDraft || !btnSubmit) return;
+
+    const newBtnDraft = btnDraft.cloneNode(true);
+    btnDraft.parentNode.replaceChild(newBtnDraft, btnDraft);
+
+    const newBtnSubmit = btnSubmit.cloneNode(true);
+    btnSubmit.parentNode.replaceChild(newBtnSubmit, btnSubmit);
+
+    newBtnDraft.addEventListener('click', () => kirimLaporan('DRAFT'));
+    newBtnSubmit.addEventListener('click', () => kirimLaporan('REPORTED'));
+}
+
+// ============================================================
+// kirimLaporan
+// ============================================================
+// status: 'DRAFT' (tombol Simpan Draft) atau 'REPORTED' (tombol Ajukan)
+// Mengirim data form ke backend (POST untuk laporan baru,
+// PUT jika sedang dalam mode edit / editingReportId terisi).
+// ============================================================
+async function kirimLaporan(status) {
+    const title       = document.getElementById('inputTitle').value.trim();
+    const category    = document.getElementById('inputCategory').value;
+    const description = document.getElementById('inputDescription').value.trim();
+    const location     = document.getElementById('inputLocation').value.trim();
+
+    if (!title || !category || !description || !location) {
+        showToast('Semua field wajib diisi.', 'warning');
+        return;
+    }
+
+    const payload = { title, category, description, location, status };
+
+    try {
+        let response;
+        if (editingReportId) {
+            response = await requestAPI(`/api/report/${editingReportId}/`, 'PUT', payload);
+        } else {
+            response = await requestAPI('/api/report/', 'POST', payload);
+        }
+
+        if (response && (response.status === 200 || response.status === 201)) {
+            // Tutup modal
+            const modalEl = document.getElementById('reportModal');
+            if (modalEl && window.bootstrap) {
+                const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+                modalInstance.hide();
+            }
+
+            const pesan = status === 'DRAFT'
+                ? 'Draft berhasil disimpan.'
+                : 'Laporan berhasil diajukan.';
+            showToast(pesan, 'success');
+
+            editingReportId = null;
+
+            // Refresh data dashboard (list + summary badge)
+            loadDashboardData(currentTab, currentPage);
+        } else {
+            showToast('Gagal menyimpan laporan. Silakan coba lagi.', 'danger');
+        }
+    } catch (error) {
+        showToast('Kesalahan koneksi saat menyimpan laporan.', 'warning');
+        console.error('kirimLaporan Error:', error);
+    }
+}
+
+// ============================================================
 // editDraft
-// ========================================
+// ============================================================
+// Membuka modal dalam mode edit untuk laporan berstatus DRAFT
+// milik pengguna sendiri. Mengambil data dari cache lastReports
+// (hasil loadDashboardData terakhir) agar tidak perlu request baru.
+// ============================================================
+function editDraft(id) {
+    const report = lastReports.find(r => r.id === id);
+    if (!report) {
+        showToast('Data laporan tidak ditemukan.', 'danger');
+        return;
+    }
+
+    editingReportId = id;
+
+    const modalLabel = document.getElementById('reportModalLabel');
+    if (modalLabel) modalLabel.textContent = 'Edit Draft Laporan';
+
+    document.getElementById('inputTitle').value       = report.title ?? '';
+    document.getElementById('inputCategory').value     = report.category ?? '';
+    document.getElementById('inputDescription').value = report.description ?? '';
+    document.getElementById('inputLocation').value     = report.location ?? '';
+
+    setupReportForm();
+
+    const modalEl = document.getElementById('reportModal');
+    if (modalEl && window.bootstrap) {
+        const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modalInstance.show();
+    }
+}
