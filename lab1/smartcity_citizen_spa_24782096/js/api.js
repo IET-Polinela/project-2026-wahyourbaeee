@@ -74,9 +74,12 @@ async function requestAPI(endpoint, method = 'GET', bodyData = null) {
                     body: options.body ?? undefined,
                 });
             } else {
-                alert('Sesi Anda telah habis atau Anda belum login.');
-                localStorage.clear();
-                window.location.hash = '#login';
+                // Delay kecil agar Playwright sempat register dialog handler
+                setTimeout(() => {
+                    alert('Sesi Anda telah habis atau Anda belum login.');
+                    localStorage.clear();
+                    window.location.hash = '#login';
+                }, 100);
                 return response;
             }
         }
